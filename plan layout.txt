@@ -1,0 +1,57 @@
+Class ideas
+player class:	holds player information and player hand
+game engine class: 	holds all the players, bag and the board
+					controls all the data changes in the game.
+
+Player class
+	allow for the holding of player information and the player tiles
+	private:
+		-email
+		-name
+		-student id
+		-hannd LinkedList
+methods
+	-get method to the players linked list
+	-get methods for the player information
+	
+
+Game engine class
+	A class to comunicate the information
+	Double constructor for loaded files and new games
+	
+	private:
+		-bag linkedlist
+		-players array of players 
+		-board 2dArray
+		-hashmap for the board values.
+			to represent a y axis in the 2dArray since it uses letters
+		
+methods
+	-print board method
+		will print the board based on its width and length
+		will read the values in board
+		print value out
+	-shuffle bag method
+		
+	-writing save file method
+		reading through players and bag and printing out board
+	-expand 2dArray
+		will check the outter positions the rim of the board to see if it has a position in it 
+		it will expand depending on where the tile is found
+		it will expand maximum to 26*26 board.
+	-check position
+		checks if position is taken by tile
+		return boolean
+	-place tile
+		this will read in player, tile and position
+		check if player has tile 
+		check if position exist
+		pickup new piece
+	-replace tile
+		this will read in player, tile
+		check if player has tile
+		add tile to the linked list
+		shuffle bag
+	-check gameEnded
+		checks both players hand for an empty hand
+		return boolean 
