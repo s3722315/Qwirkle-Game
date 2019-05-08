@@ -8,90 +8,142 @@ LinkedList::LinkedList() {
 }
 
 LinkedList::~LinkedList() {
-  delete this->head;
+  clear();
 }
 
-void LinkedList::addNode(Node* nodeAdding)
+void LinkedList::addFront(Tile data)
 {
-  if (this->head == nullptr)
-  {
-
-    this->head = nodeAdding;
-  }
-  else
-  {
-    Node* currentNode = (this->head)*;
-    while (currentNode* != NULL)
-    {
-
-      if (currentNode*.getNext() == nullptr)
-      {
-
-        currentNode*.setNext(nodeAdding);
-      }
-
-      currentNode = currentNode*.getNext();
-    }
-  }
+  Node* newNode = new Node(data, this->head);
+  this->head = newNode
 }
 
-void LinkedList::removeNode(tile tileMatch)
+void LinkedList::addBack(Tile data)
 {
-  Node* currentNode = (this->head)*;
-  Node* previousNode = nullptr;
-  bool hasTile = false;
-  while (currentNode != nullptr && hasTile == false)
+  if (data != NULL)
   {
 
-     if ((currentNode*.getTile())*.getColour() == tileMatch.getColour() &&
-     (currentNode*.getTile())*.getShape() == tileMatch.getShape())
-     {
-
-       hasTile = true;
-     }
-     else
-     {
-       previousNode* = currentNode*;
-       currentNode* = (currentNode*.getNext())*;
-     }
-  }
-
-  if (hasTile == true)
-  {
-    if (previousNode == nullptr)
+    Node* newNode = new Node(data, nullptr);
+    if (this->head == nullptr)
     {
 
-      if (currentNode*.getNext() == nullptr)
-      {
-        this->head = nullptr;
-        delete currentNode;
-      }
-      else
-      {
-
-        this->head = (currentNode*.getNext())*;
-        delete currentNode;
-      }
+      this->head = newNode;
     }
     else
     {
-      if (currentNode*.getNext() == nullptr) {
-        /* code */
-        previousNode*.setNext(nullptr);
-        delete currentNode;
+      Node* currentNode = this->head;
+      while (currentNode != nullptr)
+      {
+
+        if (currentNode->next == nullptr)
+        {
+          currentNode->next = newNode;
+        }
+
+        currentNode = currentNode->next;
+      }
+    }
+
+  }
+}
+
+void LinkedList::removeNode(Tile tileMatch)
+{
+  Node* currentNode = this->head;
+  Node* previousNode = nullptr;
+  bool hasTile = false;
+
+
+  while (currentNode != nullptr && hasTile == false)
+  {
+    if (currentNode->tile->colour = tileMatch->colour &&
+      currentNode->tile->shape = tileMatch->shape)
+    {
+
+      if (previousNode == nullptr) {
+        deleteFront();
       }
       else
       {
-        previousNode*.setNext(currentNode*.getNext());
+
+        previousNode->next = currentNode->next
+        delete currentNode->tile;
         delete currentNode;
       }
+      hasTile = true;
+    }
+    else
+    {
+      previousNode = currentNode;
+      currentNode = currentNode->next;
+    }
+
+  }
+}
+
+void LinkedList::deleteFront()
+{
+  if (this->head != nullptr)
+  {
+    Node* front = this->head;
+    this->head = front->next;
+    delete front->tile;
+    delete front;
+  }
+}
+
+void LinkedList::deleteBack()
+{
+  Node* currentNode = this->head;
+  Node* previousNode = nullptr;
+  while (currentNode !=nullptr)
+  {
+    if (currentNode->next == nullptr)
+    {
+      if (previousNode != nullptr)
+      {
+        previousNode->next = nullptr;
+      }
+
+      delete currentNode->tile;
+      delete currentNode;
     }
   }
 }
 
 void LinkedList::clear()
 {
-  while (this->head ==) {
-    /* code */
+  int nodeCount = size();
+  for (int i = 0; i < nodeCount; i++) {
+    deleteFront();
   }
+}
+
+int LinkedList::size()
+{
+  int count = 0;
+  Node* currentNode = this->head;
+  while (currentNode != nullptr) {
+    /* code */
+    count++;
+    currentNode = currentNode->;
+  }
+  return count;
+}
+
+bool LinkedList::contains(Tile tileCheck)
+{
+  Node* currentNode = this->head;
+  bool hasTile = false;
+  if (tileCheck != NULL) {
+
+    while (currentNode != nullptr && hasTile == false)
+    {
+      if (currentNode->tile->colour = tileCheck->colour &&
+        currentNode->tile->shape = tileCheck->shape)
+      {
+        hasTile = true;
+      }
+    }
+  }
+  return hasTile;
 }

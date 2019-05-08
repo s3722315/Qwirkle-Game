@@ -10,11 +10,20 @@ public:
    LinkedList();
    ~LinkedList();
 
-   void addNode(Node* nodeAdding);
+   void addFront(Tile data);
+   void addBack(Tile data);
 
-   void removeNode(tile tileMatch);
+   void removeNode(Tile tileMatch);
+
+   void deleteFront();
+   void deleteBack();
 
    void clear();
+
+   int size();
+
+   bool contains(Tile tileCheck);
+
 private:
    Node* head;
 };

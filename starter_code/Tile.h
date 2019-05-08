@@ -9,15 +9,11 @@ typedef char Colour;
 typedef int Shape;
 
 class Tile {
-private:
-   Colour colour;
-   Shape  shape;
-
 public:
    Tile(Colour colour, Shape shape);
 
-   Shape getShape();
-   Colour getCOlour();
+   Colour colour;
+   Shape  shape;
 };
 
 #endif // ASSIGN2_TILE_H

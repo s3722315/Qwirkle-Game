@@ -14,26 +14,3 @@ Node::Node(Node& other)
    this->tile = other->tile;
    this->next = other->next;
 }
-
-Node::~Node() {
-  if (this->next == nullptr)
-  {
-    delete this->next;
-  }
-  delete this->tile;
-}
-
-Tile* Node::getTile()
-{
-  return this->tile;
-}
-
-Next* Node::getNext()
-{
-  return this->next;
-}
-
-void Node::setNext(Node* nextNode)
-{
-  this->next* = nextNode;
-}
