@@ -1,4 +1,4 @@
-
+// this class is for the console print,
 
 class Game {
   private:
