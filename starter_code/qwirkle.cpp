@@ -31,12 +31,9 @@ int main(void) {
      std::cin >> menuSelect;
 
     //Switch statments are not allowed in this course
-
-    
-    //causes errors needs working on
     
     if (menuSelect == 1){
-      std::cout << "Starting a New Game" << '\n';
+       std::cout << "Starting a New Game" << '\n';
        std::cout << "Enter a name for player 1 (uppercase characters only)" << '\n';
        std::cin >> p1Name;
        std::cout << "Enter a name for player 2 (uppercase characters only)" << '\n';
@@ -45,13 +42,24 @@ int main(void) {
        std::cout << "Let's play" << '\n';
     }
     else if( menuSelect == 2 ){
-    
+       std::cout << "Name: Yousef Fares" << '\n';
+       std::cout << "Student ID: 3724131" << '\n';
+       std::cout << "Email: s3724131@student.rmit.edu.au" << '\n';
+
+       std::cout << '\n' << "Name: Andy Pham" << '\n';
+       std::cout << "Student ID: 3722315" << '\n';
+       std::cout << "Email: s3722315@student.rmit.edu.au" << '\n';
+
+       //add wenlin details
+
     }
     else if( menuSelect == 3 ){
       
     }
     else if( menuSelect == 4 ){
-      
+      std::cout << "Goodbye" << '\n';
+      exit(0); 
+
     }
     
    }
