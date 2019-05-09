@@ -30,24 +30,30 @@ int main(void) {
 
      std::cin >> menuSelect;
 
-     switch (menuSelect) {
-       case 1:
-       std::cout << "Starting a New Game" << '\n';
+    //Switch statments are not allowed in this course
+
+    
+    //causes errors needs working on
+    
+    if (menuSelect == 1){
+      std::cout << "Starting a New Game" << '\n';
        std::cout << "Enter a name for player 1 (uppercase characters only)" << '\n';
        std::cin >> p1Name;
-
        std::cout << "Enter a name for player 2 (uppercase characters only)" << '\n';
        std::cin >> p2Name;
 
        std::cout << "Let's play" << '\n';
-       break;
-       case 2:
-
-       case 3:
-
-       case 4:
-
-     }
+    }
+    else if( menuSelect == 2 ){
+    
+    }
+    else if( menuSelect == 3 ){
+      
+    }
+    else if( menuSelect == 4 ){
+      
+    }
+    
    }
    return EXIT_SUCCESS;
 }
