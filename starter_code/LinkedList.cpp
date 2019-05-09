@@ -65,8 +65,8 @@ void LinkedList::removeNode(Tile tileMatch)
       else
       {
 
-        previousNode->next = currentNode->next
-        delete currentNode->tile;
+        previousNode->next = currentNode->next;
+        currentNode->tile = nullptr;
         delete currentNode;
       }
       hasTile = true;

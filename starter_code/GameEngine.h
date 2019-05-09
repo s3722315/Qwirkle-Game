@@ -8,8 +8,6 @@ class GameEngine {
   public:
     GameEngine(Player player1, Player player2);
 
-    void ExpandBoard();
-
     bool placePiece(int playerNum, Tile placedTile, char yPos, int xPos);
 
     bool replacePiece(int playerNum, Tile replacedTile);
@@ -17,4 +15,9 @@ class GameEngine {
     bool checkGameOver();
 
     void endGame(bool gameEnded);
+
+    void clearBoard();
+    void expandBoard();
+    bool checkRow(int row);
+    bool checkColumn(int column);
 }
