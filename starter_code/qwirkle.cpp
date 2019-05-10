@@ -42,6 +42,11 @@ int main(void) {
        std::cout << "Let's play" << '\n';
     }
     else if( menuSelect == 2 ){
+
+       //loadgame here
+
+    }
+    else if( menuSelect == 3 ){
        std::cout << "Name: Yousef Fares" << '\n';
        std::cout << "Student ID: 3724131" << '\n';
        std::cout << "Email: s3724131@student.rmit.edu.au" << '\n';
@@ -50,11 +55,9 @@ int main(void) {
        std::cout << "Student ID: 3722315" << '\n';
        std::cout << "Email: s3722315@student.rmit.edu.au" << '\n';
 
-       //add wenlin details
-
-    }
-    else if( menuSelect == 3 ){
-      
+       std::cout << '\n' << "Name: Wenlin Zhang" << '\n';
+       std::cout << "Student ID: 3629698" << '\n';
+       std::cout << "Email: s3629698@student.rmit.edu.au" << '\n';
     }
     else if( menuSelect == 4 ){
       std::cout << "Goodbye" << '\n';
