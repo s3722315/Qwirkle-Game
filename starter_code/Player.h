@@ -1,30 +1,35 @@
 #include "LinkedList.h"
+#include "Bag.h"
 #include <string>
 
 //player class hols all the player information
 class Player {
   public:
-    Player(std::string Name, std::string studentId, std::string email);
+    Player(std::string name, int score, LinkedList* hand);
 
+    Player(std::string name);
     LinkedList* getHand();
 
+    void initalHand(Bag* bag);
+
+    void printHand();
+
     int getScore();
-    std::string getEmail();
+
     std::string getName();
-    std::string getStudentId();
 
     void setScore(int score);
     void addScore(int plusValue);
-    
+
     //add a node
-    void addToHand(Tile addTile);
+    void addToHand(Tile* addTile);
     //delete a node
-    void removeFromHand(Tile removeTile);
+    void replaceFromHand(Tile* removeTile, Bag* bag);
+
+    Tile* placeTile(Tile* placedTile, Bag* bag);
 
   private:
-    LinkedList* Hand;
-    std::string email;
+    LinkedList* hand;
     std::string name;
-    std::string studentId;
     int score;
 };

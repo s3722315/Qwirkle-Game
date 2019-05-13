@@ -1,4 +1,6 @@
 #include "LinkedList.h"
+#include "Tile.h"
+#include "TileCodes.h"
 
 #include <iostream>
 
@@ -6,7 +8,41 @@
 
 int main(void) {
    LinkedList* list = new LinkedList();
-   
+
+   list->addFront(new Tile(RED, CIRCLE));
+   list->printAll();
+   std::cout << '\n';
+
+   list->addBack(new Tile(YELLOW, SQUARE));
+   list->printAll();
+   std::cout << '\n';
+
+   list->addFront(new Tile(GREEN, STAR_4));
+   list->printAll();
+   std::cout << '\n';
+
+   list->addFront(new Tile(PURPLE, STAR_4));
+   list->printAll();
+   std::cout << '\n';
+
+   list->addBack(new Tile(BLUE, SQUARE));
+   list->printAll();
+   std::cout << '\n';
+
+   std::cout << list->contains(new Tile(GREEN, STAR_4)) << '\n';
+
+   std::cout << list->size() << '\n';
+   list->deleteBack();
+   list->printAll();
+   std::cout << '\n';
+
+   list->removeNode(new Tile(RED, CIRCLE));
+   list->printAll();
+   std::cout << '\n';
+
+   list->deleteFront();
+   list->printAll();
+   std::cout << '\n';
 
    delete list;
 

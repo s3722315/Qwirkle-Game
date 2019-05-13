@@ -8,5 +8,6 @@ class Game {
     void StartGame();
     void loadGame();
     void save();
-    
+
+    std
 }

@@ -11,15 +11,15 @@ LinkedList::~LinkedList() {
   clear();
 }
 
-void LinkedList::addFront(Tile data)
+void LinkedList::addFront(Tile* data)
 {
   Node* newNode = new Node(data, this->head);
-  this->head = newNode
+  this->head = newNode;
 }
 
-void LinkedList::addBack(Tile data)
+void LinkedList::addBack(Tile* data)
 {
-  if (data != NULL)
+  if (data != nullptr)
   {
 
     Node* newNode = new Node(data, nullptr);
@@ -31,12 +31,14 @@ void LinkedList::addBack(Tile data)
     else
     {
       Node* currentNode = this->head;
-      while (currentNode != nullptr)
+      bool nodeAdded = false;
+      while (currentNode != nullptr && nodeAdded == false)
       {
 
         if (currentNode->next == nullptr)
         {
           currentNode->next = newNode;
+          nodeAdded = true;
         }
 
         currentNode = currentNode->next;
@@ -46,7 +48,7 @@ void LinkedList::addBack(Tile data)
   }
 }
 
-void LinkedList::removeNode(Tile tileMatch)
+void LinkedList::removeNode(Tile* tileMatch)
 {
   Node* currentNode = this->head;
   Node* previousNode = nullptr;
@@ -55,8 +57,8 @@ void LinkedList::removeNode(Tile tileMatch)
 
   while (currentNode != nullptr && hasTile == false)
   {
-    if (currentNode->tile->colour = tileMatch->colour &&
-      currentNode->tile->shape = tileMatch->shape)
+    if (currentNode->tile->colour == tileMatch->colour &&
+      currentNode->tile->shape == tileMatch->shape)
     {
 
       if (previousNode == nullptr) {
@@ -68,6 +70,7 @@ void LinkedList::removeNode(Tile tileMatch)
         previousNode->next = currentNode->next;
         currentNode->tile = nullptr;
         delete currentNode;
+        currentNode = nullptr;
       }
       hasTile = true;
     }
@@ -86,7 +89,6 @@ void LinkedList::deleteFront()
   {
     Node* front = this->head;
     this->head = front->next;
-    delete front->tile;
     delete front;
   }
 }
@@ -104,16 +106,84 @@ void LinkedList::deleteBack()
         previousNode->next = nullptr;
       }
 
-      delete currentNode->tile;
       delete currentNode;
+      currentNode = nullptr;
+    }
+    else
+    {
+      previousNode = currentNode;
+			currentNode = currentNode->next;
     }
   }
+}
+
+void LinkedList::printAll() {
+	Node* currentNode = this->head;
+	while (currentNode != nullptr) {
+		std::cout << currentNode->tile->colour<< currentNode->tile->shape;
+		if (currentNode->next) {
+			std::cout << ", ";
+		}
+		currentNode = currentNode->next;
+	}
+}
+
+Tile* LinkedList::getFront() {
+	Tile* returnTile = nullptr;
+  if (this->head != nullptr) {
+    /* code */
+    returnTile = this->head->tile;
+  }
+
+  return returnTile;
+}
+
+Tile* LinkedList::getBack() {
+	Tile* returnTile = nullptr;
+  if (this->head != nullptr) {
+    /* code */
+    Node* currentNode = this->head;
+
+    while (currentNode != nullptr) {
+      /* code */
+      if (currentNode->next == nullptr) {
+        /* code */
+        returnTile = currentNode->tile;
+      }
+      currentNode = currentNode->next;
+    }
+  }
+
+  return returnTile;
+}
+
+Tile* LinkedList::getSpecTile(Tile* specTile)
+{
+  Node* currentNode = this->head;
+  Tile* wantedTile = nullptr;
+  bool hasTile = false;
+  if (specTile != nullptr) {
+
+    while (currentNode != nullptr && hasTile == false)
+    {
+      if (currentNode->tile->colour == specTile->colour &&
+        currentNode->tile->shape == specTile->shape)
+      {
+        wantedTile = currentNode->tile;
+        hasTile = true;
+      }
+      currentNode = currentNode->next;
+    }
+  }
+
+  return wantedTile;
 }
 
 void LinkedList::clear()
 {
   int nodeCount = size();
   for (int i = 0; i < nodeCount; i++) {
+    delete this->head->tile;
     deleteFront();
   }
 }
@@ -125,24 +195,25 @@ int LinkedList::size()
   while (currentNode != nullptr) {
     /* code */
     count++;
-    currentNode = currentNode->;
+    currentNode = currentNode->next;
   }
   return count;
 }
 
-bool LinkedList::contains(Tile tileCheck)
+bool LinkedList::contains(Tile* tileCheck)
 {
   Node* currentNode = this->head;
   bool hasTile = false;
-  if (tileCheck != NULL) {
+  if (tileCheck != nullptr) {
 
     while (currentNode != nullptr && hasTile == false)
     {
-      if (currentNode->tile->colour = tileCheck->colour &&
-        currentNode->tile->shape = tileCheck->shape)
+      if (currentNode->tile->colour == tileCheck->colour &&
+        currentNode->tile->shape == tileCheck->shape)
       {
         hasTile = true;
       }
+      currentNode = currentNode->next;
     }
   }
   return hasTile;
