@@ -17,30 +17,40 @@ void Game::menu()
 
     std::cin >> menuSelect;
 
-    switch (menuSelect) {
-      case 1:
-      std::cout << "Starting a New Game" << '\n';
-      try
-      {
+
+    if (menuSelect == 1){
+   std::cout << "Starting a New Game" << '\n';
         std::cout << "Enter a name for player 1 (uppercase characters only)" << '\n';
         std::cin >> p1Name;
-        if (p1Name.comapare()) {
+        if (p1Name.compare()) {
           /* code */
         }
         std::cout << "Enter a name for player 2 (uppercase characters only)" << '\n';
         std::cin >> p2Name;
 
         std::cout << "Let's play" << '\n';
-      }
-      catch
-
-      break;
-      case 2:
-
-      case 3:
-
-      case 4:
+    }
+    else if( menuSelect == 2 ){
 
     }
-  }
+    else if( menuSelect == 3 ){
+      std::cout << "Name: Yousef Fares" << '\n';
+       std::cout << "Student ID: 3724131" << '\n';
+       std::cout << "Email: s3724131@student.rmit.edu.au" << '\n';
+
+       std::cout << '\n' << "Name: Andy Pham" << '\n';
+       std::cout << "Student ID: 3722315" << '\n';
+       std::cout << "Email: s3722315@student.rmit.edu.au" << '\n';
+
+       std::cout << '\n' << "Name: Wenlin Zhang" << '\n';
+       std::cout << "Student ID: 3629698" << '\n';
+       std::cout << "Email: s3629698@student.rmit.edu.au" << '\n';
+    }
+    else if( menuSelect == 4 ){
+   
+
+    }
+    
+   }
+   return EXIT_SUCCESS;
 }
