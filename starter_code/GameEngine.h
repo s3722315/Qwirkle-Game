@@ -35,9 +35,27 @@ class GameEngine {
 
     char getKey(int value);
 
-    bool checkPlaceable(Tile checkTile, int yPos, int xPos);
-
-    bool checkCorner(Tile checkTile, int yPos, int xPos);
-
     bool checkPos(Tile checkTile, int yPos, int xPos);
+
+    bool checkWantedPos(Tile checkTile, int yPos, int xPos);
+
+    int sideCounter(int yPos, int xPos);
+
+    int nullChecker(int yPos, int xPos);
+
+    void pointUpdate(int playerNum, int yPos, int xPos);
+
+    int checkRowAmount(int yPos, int xPos);
+
+    int checkColAmount(int yPos, int xPos);
+
+    bool checkRowColour(Tile checkTile, int yPos, int xPos);
+
+    bool checkRowShape(Tile checkTile, int yPos, int xPos);
+
+    bool checkColColour(Tile checkTile, int yPos, int xPos);
+
+    bool checkColShape(Tile checkTile, int yPos, int xPos);
+
+    bool emptyBoard();
 }
