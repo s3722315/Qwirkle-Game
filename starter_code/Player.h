@@ -1,6 +1,9 @@
 #include "LinkedList.h"
 #include "Bag.h"
 #include <string>
+#include <cstddef>
+#include "Tile.h"
+#include "TileCodes.h"
 
 //player class hols all the player information
 class Player {

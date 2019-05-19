@@ -1,7 +1,4 @@
 #include "Bag.h"
-#include <vector>
-#include <random>
-#include <time.h>
 
 Bag::Bag() {
 	// the nums of the same tiles
@@ -33,25 +30,25 @@ Bag::Bag() {
 	}
 	// add tiles to linked list
 	for (int i = 0; i < (int)tileVec.size(); ++i) {
-		tiles.addBack(new Tile(tileVec[i].colour, tileVec[i].shape));
+		tiles->addBack(new Tile(tileVec[i].colour, tileVec[i].shape));
 	}
 }
 
-Bag::Bag(LinkedList tiles) {
+Bag::Bag(LinkedList* tiles) {
 	this->tiles = tiles;
 }
 
 Tile* Bag::getTile() {
-	Tile* resultTile = this->tiles.getFront();
-	this->tiles.deleteFront();
+	Tile* resultTile = this->tiles->getFront();
+	this->tiles->deleteFront();
 	return resultTile;
 }
 
 void Bag::addTile(Tile* tile) {
-	this->tiles.addBack(tile);
+	this->tiles->addBack(tile);
 }
 
 
 std::string Bag::toString() {
-	return this->tiles.toString();
+	return this->tiles->toString();
 }
