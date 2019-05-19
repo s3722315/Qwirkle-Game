@@ -28,6 +28,7 @@ class Player {
 
     Tile* placeTile(Tile* placedTile, Bag* bag);
 
+    std::string toString();
   private:
     LinkedList* hand;
     std::string name;

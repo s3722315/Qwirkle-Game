@@ -13,6 +13,8 @@ class GameEngine {
   public:
     GameEngine(Player player1, Player player2);
 
+    GameEngine(Player player1, Player player2, Bag* bag, Tile** board);
+
     bool placePiece(int playerNum, Tile placedTile, char yPos, int xPos);
 
     bool replacePiece(int playerNum, Tile replacedTile);
@@ -31,7 +33,7 @@ class GameEngine {
 
     // void boardToString();
 
-    void printBoard();
+    std::string boardToString();
 
     char getKey(int value);
 
@@ -58,4 +60,6 @@ class GameEngine {
     bool checkColShape(Tile checkTile, int yPos, int xPos);
 
     bool emptyBoard();
+
+    std::string toString();
 }

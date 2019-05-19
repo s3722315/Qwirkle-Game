@@ -73,3 +73,18 @@ Tile* Player::placeTile(Tile* placedTile, Bag* bag)
 
 	return placingTile;
 }
+
+std::string Player::toString()
+{
+	std::string returnString = "";
+	if (this->name != NULL) {
+		/* code */
+		returnString += this->name;
+		returnString += '\n';
+		returnString += std::to_string(this->score);
+		returnString += '\n';
+
+		returnString += hand->toString();
+	}
+	return returnString;
+}

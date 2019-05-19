@@ -122,7 +122,7 @@ void LinkedList::printAll() {
 	while (currentNode != nullptr) {
 		std::cout << currentNode->tile->colour<< currentNode->tile->shape;
 		if (currentNode->next) {
-			std::cout << ", ";
+			std::cout << ",";
 		}
 		currentNode = currentNode->next;
 	}
@@ -217,4 +217,21 @@ bool LinkedList::contains(Tile* tileCheck)
     }
   }
   return hasTile;
+}
+
+std::string LinkedList::toString()
+{
+  std::string returnString = "";
+
+  Node* currentNode = this->head;
+	while (currentNode != nullptr) {
+		returnString += currentNode->tile->colour;
+    returnString += std::to_string(currentNode->tile->shape);
+		if (currentNode->next) {
+      returnString += ",";
+		}
+		currentNode = currentNode->next;
+	}
+
+  return returnString;
 }

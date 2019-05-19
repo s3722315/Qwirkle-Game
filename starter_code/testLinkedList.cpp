@@ -44,6 +44,8 @@ int main(void) {
    list->printAll();
    std::cout << '\n';
 
+   std::cout << list->toString() << '\n';
+
    delete list;
 
    std::cout << "TODO: Implement Qwirkle!" << std::endl;

@@ -38,6 +38,7 @@ public:
    // CHecks if the tile wanted exist in the linkedList
    bool contains(Tile* tileCheck);
 
+   std::string toString();
 private:
    Node* head;
 };

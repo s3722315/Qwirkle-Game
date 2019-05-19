@@ -48,6 +48,43 @@ GameEngine::GameEngine(Player player1, Player player2)
   clearBoard();
 }
 
+GameEngine::GameEngine(Player player1, Player player2, Bag* bag, Tile** board)
+{
+  this->players[0] = player1;
+  this->players[0] = player1;
+  this->players[1] = player2;
+  this->tileBag = bag;
+  this->board = board;
+
+  //fix or figure out how to make shorter
+  this->yIndexMap.insert(std::pair<char,int>('A',0));
+  this->yIndexMap.insert(std::pair<char,int>('B',1));
+  this->yIndexMap.insert(std::pair<char,int>('C',2));
+  this->yIndexMap.insert(std::pair<char,int>('D',3));
+  this->yIndexMap.insert(std::pair<char,int>('E',4));
+  this->yIndexMap.insert(std::pair<char,int>('F',5));
+  this->yIndexMap.insert(std::pair<char,int>('G',6));
+  this->yIndexMap.insert(std::pair<char,int>('H,7));
+  this->yIndexMap.insert(std::pair<char,int>('I',8));
+  this->yIndexMap.insert(std::pair<char,int>('J',9));
+  this->yIndexMap.insert(std::pair<char,int>('K',10));
+  this->yIndexMap.insert(std::pair<char,int>('L',11));
+  this->yIndexMap.insert(std::pair<char,int>('M',12));
+  this->yIndexMap.insert(std::pair<char,int>('N',13));
+  this->yIndexMap.insert(std::pair<char,int>('O',14));
+  this->yIndexMap.insert(std::pair<char,int>('P',15));
+  this->yIndexMap.insert(std::pair<char,int>('Q',16));
+  this->yIndexMap.insert(std::pair<char,int>('R',17));
+  this->yIndexMap.insert(std::pair<char,int>('S',18));
+  this->yIndexMap.insert(std::pair<char,int>('T',19));
+  this->yIndexMap.insert(std::pair<char,int>('U',20));
+  this->yIndexMap.insert(std::pair<char,int>('V',21));
+  this->yIndexMap.insert(std::pair<char,int>('W',22));
+  this->yIndexMap.insert(std::pair<char,int>('X',23));
+  this->yIndexMap.insert(std::pair<char,int>('Y',24));
+  this->yIndexMap.insert(std::pair<char,int>('Z',25));
+}
+
 bool GameEngine::placePiece(int playerNum, Tile placedTile, char yPos, int xPos)
 {
   bool returnBool = false;
@@ -210,20 +247,22 @@ bool GameEngine::checkColumn(int column)
   return needExpanding;
 }
 
-void GameEngine::printBoard()
+std::string GameEngine::boardToString()
 {
+  std::string returnString = "";
   for (size_t i = 0; i < sizeOf(this->board); i++) {
     /* code */
     if (i == 0) {
       /* code */
-      std::cout << "   ";
+      returnString += "   ";
     }
 
-    std::cout << "  " << i;
+    returnString += "  ";
+    returnString += std::to_string(i);
 
     if (i == (sizeOf(this->board) - 1)) {
       /* code */
-      std::cout << '\n';
+      returnString += '\n';
     }
   }
 
@@ -231,13 +270,13 @@ void GameEngine::printBoard()
     /* code */
     if (i == 0) {
       /* code */
-      std::cout << "  -";
+      returnString += "  -";
     }
-    std::cout << "---";
+    returnString += "---";
 
     if (i == (sizeOf(this->board) - 1)) {
       /* code */
-      std::cout << '\n';
+      returnString += '\n';
     }
   }
 
@@ -247,24 +286,28 @@ void GameEngine::printBoard()
       /* code */
       if (j == 0) {
         /* code */
-        std::cout << getKey(i) << " |";
+        returnString += getKey(i);
+        returnString += " |";
       }
 
       if (this->board[i][j] == NULL) {
         /* code */
-        std::cout << "  |";
+        returnString += "  |";
       }
       else {
 
-        std::cout << this->board[i][j].colour << this->board[i][j].shape << "|";
+        returnString += this->board[i][j].colour;
+        returnString += std::to_string(this->board[i][j].shape);
+        returnString += "|";
       }
 
       if (j == (sizeOf(this->board[i]) - 1)) {
         /* code */
-        std::cout << '\n';
+        returnString += '\n';
       }
     }
   }
+  return returnString;
 }
 
 char GameEngine::getKey(int value)
@@ -770,4 +813,29 @@ bool GameEngine::emptyBoard()
   }
 
   return empty;
+}
+
+std::string GameEngine::toString(playerNum)
+{
+  std::string returnString = "";
+
+  if (this->players[0] != NULL && this->players[1] != NULL)
+  {
+    if (this->tileBag != nullptr) {
+      /* code */
+      for (size_t i = 0; i < sizeOf(this->players); i++) {
+        /* code */
+        returnString += this->players[i].toString();
+        returnString += '\n';
+      }
+
+      returnString += boardToString();
+      returnString += this->tileBag->toString();
+      returnString += '\n';
+
+      returnString += this->players[playerNum].getName();
+    }
+  }
+
+  return returnString;
 }

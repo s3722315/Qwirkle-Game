@@ -37,6 +37,10 @@ Bag::Bag() {
 	}
 }
 
+Bag::Bag(LinkedList tiles) {
+	this->tiles = tiles;
+}
+
 Tile* Bag::getTile() {
 	Tile* resultTile = this->tiles.getFront();
 	this->tiles.deleteFront();
@@ -48,6 +52,6 @@ void Bag::addTile(Tile* tile) {
 }
 
 
-void Bag::_testToShowTiles() {
-	tiles.printAll();
+std::string Bag::toString() {
+	return this->tiles.toString();
 }
