@@ -61,6 +61,8 @@ class GameEngine {
 
     bool emptyBoard();
 
+    void makeYIndexMap();
+
     std::string toString(int playerNum);
 
     std::string getHand(int playerNum);

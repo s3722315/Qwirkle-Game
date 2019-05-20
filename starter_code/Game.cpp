@@ -52,7 +52,7 @@ void Game::menu()
       if (allCaps) {
         /* code */
         std::cout << "Let's play" << '\n';
-        this->gameEngine = GameEngine
+        this->gameEngine = GameEngine(new Player(p1Name), new Player(p2Name));
         startGame();
         menu
       }

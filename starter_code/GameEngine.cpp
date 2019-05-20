@@ -10,10 +10,18 @@ GameEngine::GameEngine(Player* player1, Player* player2)
   this->tileBag = new Bag();
 
   this->rowColSize = 6;
-  this->board = new Tile**[rowColSize];
-  for(int i = 0; i < rowColSize; i++)
+  this->board = new Tile**[this->rowColSize];
+  for(int i = 0; i < this->rowColSize; i++)
   {
     this->board[i] = new Tile*[rowColSize];
+  }
+
+  for(int i = 0; i < this->rowColSize; i++)
+  {
+    for(int j = 0; j < this->rowColSize; j++)
+    {
+      this->board[i][j] = nullptr;
+    }
   }
 
   for (int i = 0; i < 2; i++) {
@@ -21,33 +29,7 @@ GameEngine::GameEngine(Player* player1, Player* player2)
     this->players[i]->initalHand(this->tileBag);
   }
 
-  this->yIndexMap.insert(std::pair<char,int>('A',0));
-  this->yIndexMap.insert(std::pair<char,int>('B',1));
-  this->yIndexMap.insert(std::pair<char,int>('C',2));
-  this->yIndexMap.insert(std::pair<char,int>('D',3));
-  this->yIndexMap.insert(std::pair<char,int>('E',4));
-  this->yIndexMap.insert(std::pair<char,int>('F',5));
-  this->yIndexMap.insert(std::pair<char,int>('G',6));
-  this->yIndexMap.insert(std::pair<char,int>('H',7));
-  this->yIndexMap.insert(std::pair<char,int>('I',8));
-  this->yIndexMap.insert(std::pair<char,int>('J',9));
-  this->yIndexMap.insert(std::pair<char,int>('K',10));
-  this->yIndexMap.insert(std::pair<char,int>('L',11));
-  this->yIndexMap.insert(std::pair<char,int>('M',12));
-  this->yIndexMap.insert(std::pair<char,int>('N',13));
-  this->yIndexMap.insert(std::pair<char,int>('O',14));
-  this->yIndexMap.insert(std::pair<char,int>('P',15));
-  this->yIndexMap.insert(std::pair<char,int>('Q',16));
-  this->yIndexMap.insert(std::pair<char,int>('R',17));
-  this->yIndexMap.insert(std::pair<char,int>('S',18));
-  this->yIndexMap.insert(std::pair<char,int>('T',19));
-  this->yIndexMap.insert(std::pair<char,int>('U',20));
-  this->yIndexMap.insert(std::pair<char,int>('V',21));
-  this->yIndexMap.insert(std::pair<char,int>('W',22));
-  this->yIndexMap.insert(std::pair<char,int>('X',23));
-  this->yIndexMap.insert(std::pair<char,int>('Y',24));
-  this->yIndexMap.insert(std::pair<char,int>('Z',25));
-
+  makeYIndexMap();
 }
 
 GameEngine::GameEngine(Player* player1, Player* player2, Bag* bag, Tile*** board, int rowColSize)
@@ -59,33 +41,7 @@ GameEngine::GameEngine(Player* player1, Player* player2, Bag* bag, Tile*** board
   this->board = board;
   this->rowColSize = rowColSize;
 
-  //fix or figure out how to make shorter
-  this->yIndexMap.insert(std::pair<char,int>('A',0));
-  this->yIndexMap.insert(std::pair<char,int>('B',1));
-  this->yIndexMap.insert(std::pair<char,int>('C',2));
-  this->yIndexMap.insert(std::pair<char,int>('D',3));
-  this->yIndexMap.insert(std::pair<char,int>('E',4));
-  this->yIndexMap.insert(std::pair<char,int>('F',5));
-  this->yIndexMap.insert(std::pair<char,int>('G',6));
-  this->yIndexMap.insert(std::pair<char,int>('H',7));
-  this->yIndexMap.insert(std::pair<char,int>('I',8));
-  this->yIndexMap.insert(std::pair<char,int>('J',9));
-  this->yIndexMap.insert(std::pair<char,int>('K',10));
-  this->yIndexMap.insert(std::pair<char,int>('L',11));
-  this->yIndexMap.insert(std::pair<char,int>('M',12));
-  this->yIndexMap.insert(std::pair<char,int>('N',13));
-  this->yIndexMap.insert(std::pair<char,int>('O',14));
-  this->yIndexMap.insert(std::pair<char,int>('P',15));
-  this->yIndexMap.insert(std::pair<char,int>('Q',16));
-  this->yIndexMap.insert(std::pair<char,int>('R',17));
-  this->yIndexMap.insert(std::pair<char,int>('S',18));
-  this->yIndexMap.insert(std::pair<char,int>('T',19));
-  this->yIndexMap.insert(std::pair<char,int>('U',20));
-  this->yIndexMap.insert(std::pair<char,int>('V',21));
-  this->yIndexMap.insert(std::pair<char,int>('W',22));
-  this->yIndexMap.insert(std::pair<char,int>('X',23));
-  this->yIndexMap.insert(std::pair<char,int>('Y',24));
-  this->yIndexMap.insert(std::pair<char,int>('Z',25));
+  makeYIndexMap();
 
 }
 
@@ -829,6 +785,36 @@ bool GameEngine::emptyBoard()
   }
 
   return empty;
+}
+
+void GameEngine::makeYIndexMap()
+{
+  this->yIndexMap.insert(std::pair<char,int>('A',0));
+  this->yIndexMap.insert(std::pair<char,int>('B',1));
+  this->yIndexMap.insert(std::pair<char,int>('C',2));
+  this->yIndexMap.insert(std::pair<char,int>('D',3));
+  this->yIndexMap.insert(std::pair<char,int>('E',4));
+  this->yIndexMap.insert(std::pair<char,int>('F',5));
+  this->yIndexMap.insert(std::pair<char,int>('G',6));
+  this->yIndexMap.insert(std::pair<char,int>('H',7));
+  this->yIndexMap.insert(std::pair<char,int>('I',8));
+  this->yIndexMap.insert(std::pair<char,int>('J',9));
+  this->yIndexMap.insert(std::pair<char,int>('K',10));
+  this->yIndexMap.insert(std::pair<char,int>('L',11));
+  this->yIndexMap.insert(std::pair<char,int>('M',12));
+  this->yIndexMap.insert(std::pair<char,int>('N',13));
+  this->yIndexMap.insert(std::pair<char,int>('O',14));
+  this->yIndexMap.insert(std::pair<char,int>('P',15));
+  this->yIndexMap.insert(std::pair<char,int>('Q',16));
+  this->yIndexMap.insert(std::pair<char,int>('R',17));
+  this->yIndexMap.insert(std::pair<char,int>('S',18));
+  this->yIndexMap.insert(std::pair<char,int>('T',19));
+  this->yIndexMap.insert(std::pair<char,int>('U',20));
+  this->yIndexMap.insert(std::pair<char,int>('V',21));
+  this->yIndexMap.insert(std::pair<char,int>('W',22));
+  this->yIndexMap.insert(std::pair<char,int>('X',23));
+  this->yIndexMap.insert(std::pair<char,int>('Y',24));
+  this->yIndexMap.insert(std::pair<char,int>('Z',25));
 }
 
 std::string GameEngine::toString(int playerNum)
