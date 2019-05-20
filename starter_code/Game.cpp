@@ -1,10 +1,15 @@
 #include "Game.h"
 
+Game::Game()
+{
+  menu();
+}
 
 void Game::menu()
 {
-  while (menuOff = false) {
-    std::cout << "Menu\n" << '\n';
+  bool menuOff = false;
+  while (menuOff == false) {
+    std::cout << "Menu" << '\n';
     std::cout << "----" << '\n';
     std::cout << "1. New Game" << '\n';
     std::cout << "2. Load Game" << '\n';
@@ -19,16 +24,38 @@ void Game::menu()
 
 
     if (menuSelect == 1){
-   std::cout << "Starting a New Game" << '\n';
-        std::cout << "Enter a name for player 1 (uppercase characters only)" << '\n';
-        std::cin >> p1Name;
-        if (p1Name.compare()) {
-          /* code */
-        }
-        std::cout << "Enter a name for player 2 (uppercase characters only)" << '\n';
-        std::cin >> p2Name;
+      std::cout << "Starting a New Game" << '\n';
+      std::cout << "Enter a name for player 1 (uppercase characters only)" << '\n';
+      std::cin >> p1Name;
 
+      std::cout << "Enter a name for player 2 (uppercase characters only)" << '\n';
+      std::cin >> p2Name;
+
+      bool allCaps = true;
+      for (int i = 0; i < p1Name.length(); i++) {
+        /* code */
+        char c = p1Name[i];
+        if (islower(c) == 0) {
+          /* code */
+          allCaps = false;
+        }
+      }
+      for (int i = 0; i < p2Name.length(); i++) {
+        /* code */
+        char c = p2Name[i];
+        if (islower(c) == 0) {
+          /* code */
+          allCaps = false;
+        }
+      }
+
+      if (allCaps) {
+        /* code */
         std::cout << "Let's play" << '\n';
+        this->gameEngine = GameEngine
+        startGame();
+        menu
+      }
     }
     else if( menuSelect == 2 ){
 
@@ -47,10 +74,15 @@ void Game::menu()
        std::cout << "Email: s3629698@student.rmit.edu.au" << '\n';
     }
     else if( menuSelect == 4 ){
-   
+
 
     }
-    
+
    }
    return EXIT_SUCCESS;
+}
+
+void Game::startGame()
+{
+
 }

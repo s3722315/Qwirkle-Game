@@ -1,5 +1,7 @@
 #include "GameEngine.h"
 
+GameEngine::GameEngine(){}
+
 GameEngine::GameEngine(Player* player1, Player* player2)
 {
   this->players[0] = player1;
@@ -848,6 +850,17 @@ std::string GameEngine::toString(int playerNum)
 
       returnString += this->players[playerNum]->getName();
     }
+  }
+
+  return returnString;
+}
+
+std::string GameEngine::getHand(int playerNum)
+{
+  std::string returnString = "";
+  if (this->players[0] != nullptr && this->players[1] != nullptr)
+  {
+    returnString += this->players[playerNum];
   }
 
   return returnString;

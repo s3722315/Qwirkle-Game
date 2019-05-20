@@ -13,6 +13,8 @@ class GameEngine {
     std::map<char, int> yIndexMap;
     int rowColSize;
   public:
+    GameEngine();
+
     GameEngine(Player* player1, Player* player2);
 
     GameEngine(Player* player1, Player* player2, Bag* bag, Tile*** board, int rowColSize);
@@ -60,4 +62,6 @@ class GameEngine {
     bool emptyBoard();
 
     std::string toString(int playerNum);
+
+    std::string getHand(int playerNum);
 };
