@@ -11,6 +11,7 @@ Player::Player(std::string name, int score, LinkedList* hand)
 Player::Player(std::string name) {
 	this->name = name;
 	this->score = 0;
+	this->hand = new LinkedList();
 }
 LinkedList* Player::getHand()
 {

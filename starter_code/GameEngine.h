@@ -66,4 +66,7 @@ class GameEngine {
     std::string toString(int playerNum);
 
     std::string getHand(int playerNum);
+
+    Player* getPlayer(int playerNum);
+    
 };

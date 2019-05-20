@@ -1,6 +1,8 @@
 #include "Bag.h"
 
 Bag::Bag() {
+
+	this->tiles = new LinkedList();
 	// the nums of the same tiles
 	const int numsOfTheSameTile = 2;
 	// use vectors to store the necessary attributes to initial Bag

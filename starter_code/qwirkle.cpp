@@ -13,6 +13,6 @@ int main(void) {
    std::cout << "TODO: Implement Qwirkle!" << std::endl;
 
    Game game = Game();
-   }
+   
    return EXIT_SUCCESS;
 }

@@ -1,6 +1,7 @@
 // this class is for the console print,
 #include <ctype.h>
 #include <string>
+#include <fstream>
 #include "GameEngine.h"
 
 
@@ -13,7 +14,8 @@ class Game {
     void menu();
     void startGame();
     void loadGame();
-    void save();
+    void save(std::string fileName, int currentPlayer);
 
-    std
+    void help();
+
 };

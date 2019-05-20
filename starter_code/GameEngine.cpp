@@ -24,6 +24,7 @@ GameEngine::GameEngine(Player* player1, Player* player2)
     }
   }
 
+
   for (int i = 0; i < 2; i++) {
     /* code */
     this->players[i]->initalHand(this->tileBag);
@@ -49,20 +50,16 @@ bool GameEngine::placePiece(int playerNum, Tile placedTile, char yPos, int xPos)
 {
   bool returnBool = false;
   int yPosInt = this->yIndexMap.find(yPos)->second;
-  std::cout << "yPos: "<< yPosInt << '\n';
   if (playerNum == 0 || playerNum == 1)
   {;
     if (players[playerNum] != nullptr) {
       /* code */
-      std::cout << "player Found" << '\n';
       if ((this->players[playerNum]->getHand())->contains(&placedTile)) {
         /* code */
-        std::cout << "player has piece" << '\n';
         if ((yPosInt < this->rowColSize) && xPos < this->rowColSize) {
           /* code */
           if (this->board[yPosInt][xPos] == nullptr) {
             /* code */
-            std::cout << "position empty" << '\n';
             if (checkWantedPos(placedTile, yPosInt, xPos) == true) {
               /* code */
               if (checkColAmount(yPosInt, xPos) < 6 && checkRowAmount(yPosInt, xPos) < 6) {
@@ -142,7 +139,6 @@ void GameEngine::expandBoard()
   if (checkRow(0) || checkColumn(0) || checkRow(this->rowColSize - 1)
   || checkColumn(this->rowColSize - 1)) {
     /* code */
-    std::cout << "expandingBoard" << '\n';
     if ((this->rowColSize < 26) && ((this->rowColSize + 2) <= 26)) {
       /* code */
       Tile*** bigBoard = new Tile**[this->rowColSize + 2];
@@ -846,8 +842,18 @@ std::string GameEngine::getHand(int playerNum)
   std::string returnString = "";
   if (this->players[0] != nullptr && this->players[1] != nullptr)
   {
-    returnString += this->players[playerNum];
+    returnString += this->players[playerNum]->getHand()->toString();
   }
 
   return returnString;
+}
+
+Player* GameEngine::getPlayer(int playerNum)
+{
+  Player* returnPlayer = nullptr;
+  if ((playerNum < 2) && (playerNum >= 0)) {
+    /* code */
+    returnPlayer = this->players[playerNum];
+  }
+  return returnPlayer;
 }
