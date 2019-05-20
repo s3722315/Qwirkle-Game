@@ -19,6 +19,7 @@ void Game::menu()
     int menuSelect = 0;
     std::string p1Name;
     std::string p2Name;
+
     std::string menuString;
     std::cin >> menuString;
     std::cin.ignore();
@@ -57,7 +58,7 @@ void Game::menu()
         /* code */
         std::cout << "Let's play" << '\n';
         this->gameEngine = GameEngine(new Player(p1Name), new Player(p2Name));
-        startGame();
+        startGame(0);
         menuOff = true;
       }
       else {
@@ -90,10 +91,10 @@ void Game::menu()
    std::cout << "Goodbye" << '\n';
 }
 
-void Game::startGame()
+void Game::startGame(int playerTurn)
 {
   bool gameEnded = false;
-  int currentPlayer = 0;
+  int currentPlayer = playerTurn;
 
   while (gameEnded == false) {
     /* code */
@@ -114,10 +115,11 @@ void Game::startGame()
     std::cout << '\n';
 
     bool turnEnded = false;
-    bool gameSaved = false;
     bool quit = false;
     while (turnEnded == false) {
       std::string userOption;
+      bool gameSaved = false;
+      bool helped = false;
 
       getline(std::cin, userOption);
 
@@ -175,13 +177,31 @@ void Game::startGame()
 
         quit = true;
       }
+      else if (userOption.compare("help") == 0) {
+
+        std::cout << "Commands:" << '\n';
+        std::cout << "  replace <TILE> : will replace the <TILE> in Hand" << '\n';
+        std::cout << "  place <TILE> at <POSITION>: will place the <TILE> in Hand" << '\n';
+        std::cout << "       onto the board at <POSITION>. Yaxis then Xaxis, eXample 'B1'" << '\n';
+        std::cout << "  save <FILENAME> : save the current progress of the game to" << '\n';
+        std::cout << "       a file named <FILENAME>" << '\n';
+        std::cout << "  quit : leave the game" << '\n';
+
+        helped = true;
+      }
       // if (userOption == EOF) {
       //   /* code */
       // }
+      if (quit == true) {
+        /* code */
+        turnEnded = true;
+        gameEnded = true;
+      }
 
-      if (turnEnded == false && gameSaved == false) {
+      if (turnEnded == false && gameSaved == false && helped == false) {
         /* code */
         std::cout << "Invalid input" << '\n';
+        std::cout << "Enter 'help' for command list" << '\n';
       }
 
       if (turnEnded == true) {
@@ -200,12 +220,6 @@ void Game::startGame()
           currentPlayer++;
         }
       }
-
-      if (quit == true) {
-        /* code */
-        turnEnded = true;
-        gameEnded = true;
-      }
     }
   }
 }
@@ -219,4 +233,50 @@ void Game::save(std::string fileName, int currentPlayer)
 
   outFile << this->gameEngine.toString(currentPlayer);
   outFile.close();
+}
+
+Player* loadPlayer(std::ifstream myfile)
+{
+  if (myfile.is_open()) {
+    /* code */
+    getline(myfile, line);
+    std::string p1Name;
+    p1Name = line;
+    int p1Score;
+
+    getline(myfile, line);
+    p1Score = std::atoi(&line[0]);
+
+    std::cout << p1Name << '\n';
+    std::cout << p1Score << '\n';
+
+    getline(myfile, line);
+    std::string handString;
+    handString = line;
+    std::string tile;
+    std::cout << line << '\n';
+    LinkedList* p1Hand = new LinkedList();
+
+    while (handString.find(",") != std::string::npos)
+    {
+      tile = handString.substr(0, handString.find(","));
+
+      char readColour = tile[0];
+      int readShape = std::atoi(&tile[1]);
+
+      p1Hand->addBack(new Tile(readColour, readShape));
+
+      handString = handString.substr(handString.find(",") + 1, handString.length());
+
+    }
+    char lastColour = handString[0];
+    int lastShape = std::atoi(&handString[1]);
+
+    p1Hand->addBack(new Tile(lastColour, lastShape));
+
+    std::cout << p1Hand->toString() << '\n';
+
+    Player* p1 = new Player(p1Name, p1Score, p1Hand);
+  }
+  return p1;
 }

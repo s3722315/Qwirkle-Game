@@ -12,9 +12,11 @@ class Game {
     Game();
 
     void menu();
-    void startGame();
-    void loadGame();
+    void startGame(int playerTurn);
+    void loadGame(std::string fileName);
     void save(std::string fileName, int currentPlayer);
+
+    Player* loadPlayer(std::ifstream myfile)
 
     void help();
 
