@@ -1,6 +1,6 @@
 #include "Bag.h"
 #include <iostream>
-using namespace std;
+
 int main() {
 	Bag bag;
 		std::cout << bag.toString() << '\n';

@@ -1,21 +1,22 @@
 #include "GameEngine.h"
 
-GameEngine::GameEngine(Player player1, Player player2)
+GameEngine::GameEngine(Player* player1, Player* player2)
 {
   this->players[0] = player1;
   this->players[1] = player2;
 
   this->tileBag = new Bag();
 
-  this->board = new Tile*[6];
-  for(int i = 0; i < sizeOf(this->board); i++)
+  this->rowColSize = 6;
+  this->board = new Tile**[rowColSize];
+  for(int i = 0; i < rowColSize; i++)
   {
-    this->board[i] = new Tile[6];
+    this->board[i] = new Tile*[rowColSize];
   }
 
-  for (size_t i = 0; i < 2; i++) {
+  for (int i = 0; i < 2; i++) {
     /* code */
-    this->players[0].initalHand(this->tileBag);
+    this->players[i]->initalHand(this->tileBag);
   }
 
   this->yIndexMap.insert(std::pair<char,int>('A',0));
@@ -25,7 +26,7 @@ GameEngine::GameEngine(Player player1, Player player2)
   this->yIndexMap.insert(std::pair<char,int>('E',4));
   this->yIndexMap.insert(std::pair<char,int>('F',5));
   this->yIndexMap.insert(std::pair<char,int>('G',6));
-  this->yIndexMap.insert(std::pair<char,int>('H,7));
+  this->yIndexMap.insert(std::pair<char,int>('H',7));
   this->yIndexMap.insert(std::pair<char,int>('I',8));
   this->yIndexMap.insert(std::pair<char,int>('J',9));
   this->yIndexMap.insert(std::pair<char,int>('K',10));
@@ -45,16 +46,16 @@ GameEngine::GameEngine(Player player1, Player player2)
   this->yIndexMap.insert(std::pair<char,int>('Y',24));
   this->yIndexMap.insert(std::pair<char,int>('Z',25));
 
-  clearBoard();
 }
 
-GameEngine::GameEngine(Player player1, Player player2, Bag* bag, Tile** board)
+GameEngine::GameEngine(Player* player1, Player* player2, Bag* bag, Tile*** board, int rowColSize)
 {
   this->players[0] = player1;
-  this->players[0] = player1;
   this->players[1] = player2;
+
   this->tileBag = bag;
   this->board = board;
+  this->rowColSize = rowColSize;
 
   //fix or figure out how to make shorter
   this->yIndexMap.insert(std::pair<char,int>('A',0));
@@ -64,7 +65,7 @@ GameEngine::GameEngine(Player player1, Player player2, Bag* bag, Tile** board)
   this->yIndexMap.insert(std::pair<char,int>('E',4));
   this->yIndexMap.insert(std::pair<char,int>('F',5));
   this->yIndexMap.insert(std::pair<char,int>('G',6));
-  this->yIndexMap.insert(std::pair<char,int>('H,7));
+  this->yIndexMap.insert(std::pair<char,int>('H',7));
   this->yIndexMap.insert(std::pair<char,int>('I',8));
   this->yIndexMap.insert(std::pair<char,int>('J',9));
   this->yIndexMap.insert(std::pair<char,int>('K',10));
@@ -83,43 +84,49 @@ GameEngine::GameEngine(Player player1, Player player2, Bag* bag, Tile** board)
   this->yIndexMap.insert(std::pair<char,int>('X',23));
   this->yIndexMap.insert(std::pair<char,int>('Y',24));
   this->yIndexMap.insert(std::pair<char,int>('Z',25));
+
 }
 
 bool GameEngine::placePiece(int playerNum, Tile placedTile, char yPos, int xPos)
 {
   bool returnBool = false;
+  int yPosInt = this->yIndexMap.find(yPos)->second;
+  std::cout << "yPos: "<< yPosInt << '\n';
   if (playerNum == 0 || playerNum == 1)
-  {
-    if (this->players[playerNum] != NULL) {
+  {;
+    if (players[playerNum] != nullptr) {
       /* code */
-      if ((this->players[playerNum].getHand()).contains(&placedTile)) {
+      std::cout << "player Found" << '\n';
+      if ((this->players[playerNum]->getHand())->contains(&placedTile)) {
         /* code */
-        if ((this->yIndexMap.find(yPos) > sizeOf(this->board)) && xPos > sizeOf(this->board)) {
+        std::cout << "player has piece" << '\n';
+        if ((yPosInt < this->rowColSize) && xPos < this->rowColSize) {
           /* code */
-          if (this->board[this->yIndexMap.find(yPos)][xPos] == null) {
+          if (this->board[yPosInt][xPos] == nullptr) {
             /* code */
-            if (checkWantedPos(placedTile, this->yIndexMap.find(yPos), xPos) == true) {
+            std::cout << "position empty" << '\n';
+            if (checkWantedPos(placedTile, yPosInt, xPos) == true) {
               /* code */
-              if (checkColAmount(yPos, xPos) < 6 && checkRowAmount(yPos, xPos) < 6) {
+              if (checkColAmount(yPosInt, xPos) < 6 && checkRowAmount(yPosInt, xPos) < 6) {
                 /* code */
-                if (checkRowShape(yPos, xPos) == true || checkRowColour(yPos, xPos) == true) {
+                if (checkRowShape(placedTile, yPosInt, xPos) == true || checkRowColour(placedTile, yPosInt, xPos) == true) {
                   /* code */
-                  if (checkColShape(yPos, xPos) == true || checkColColour(yPos, xPos) == true) {
+                  if (checkColShape(placedTile, yPosInt, xPos) == true || checkColColour(placedTile, yPosInt, xPos) == true) {
                     /* code */
-                    Tile* placingTile = this->players[playerNum].placeTile(&placedTile, this->tileBag);
+                    Tile* placingTile = this->players[playerNum]->placeTile(&placedTile, this->tileBag);
 
-                    this->board[this->yIndexMap.find(yPos)][xPos] = placingTile;
+                    this->board[yPosInt][xPos] = placingTile;
 
                     returnBool = true;
                   }
                 }
               }
             }
-            else if (emptyBoard() = true)
+            else if (emptyBoard() == true)
             {
-              Tile* placingTile = this->players[playerNum].placeTile(&placedTile, this->tileBag);
+              Tile* placingTile = this->players[playerNum]->placeTile(&placedTile, this->tileBag);
 
-              this->board[this->yIndexMap.find(yPos)][xPos] = placingTile;
+              this->board[yPosInt][xPos] = placingTile;
 
               returnBool = true;
             }
@@ -131,7 +138,8 @@ bool GameEngine::placePiece(int playerNum, Tile placedTile, char yPos, int xPos)
 
   if (returnBool == true) {
     /* code */
-    pointUpdate(playerNum, this->yIndexMap.find(yPos), xPos);
+    pointUpdate(playerNum, yPosInt, xPos);
+    expandBoard();
   }
   return returnBool;
 }
@@ -139,18 +147,15 @@ bool GameEngine::placePiece(int playerNum, Tile placedTile, char yPos, int xPos)
 bool GameEngine::replacePiece(int playerNum, Tile replacedTile)
 {
   bool returnBool = false;
+
   if (playerNum == 0 || playerNum == 1)
   {
-    if (this->players[playerNum] != NULL) {
+    if (this->players[playerNum] != nullptr) {
 
-      if ((this->players[playerNum].getHand()).contains(&placedTile)) {
+      if ((this->players[playerNum]->getHand())->contains(&replacedTile)) {
         /* code */
-        if ((this->yIndexMap.find(yPos) > sizeOf(this->board)) && xPos > sizeOf(this->board)) {
-          /* code */
-          this->players[playerNum].removeFromHand(&placedTile, this->tileBag);
-
-          returnBool = true;
-        }
+        this->players[playerNum]->replaceFromHand(&replacedTile, this->tileBag);
+        returnBool = true;
       }
     }
   }
@@ -162,9 +167,9 @@ bool GameEngine::checkGameOver()
   bool returnBool = false;
   for (int i = 0; i < 2; i++) {
     /* code */
-    if (this->players[i] != NULL) {
+    if (this->players[i] != nullptr) {
       /* code */
-      if ((this->player.getHand()).size() == 0) {
+      if ((this->players[i]->getHand())->size() == 0) {
         /* code */
         returnBool = true;
       }
@@ -174,41 +179,39 @@ bool GameEngine::checkGameOver()
   return returnBool;
 }
 
-void GameEngine::clearBoard()
-{
-  for (int i = 0; i < sizeOf(this->board); i++) {
-    /* code */
-    for (int j = 0; j < sizeOf(this->board[i]); j++) {
-      /* code */
-      this->board[i][j] = NULL;
-    }
-  }
-}
-
 void GameEngine::expandBoard()
 {
-  if (checkRow(0) || checkColumn(0) || checkRow(sizeOf(this->board))
-  || checkColumn(sizeOf(this->board[0]))) {
+  if (checkRow(0) || checkColumn(0) || checkRow(this->rowColSize - 1)
+  || checkColumn(this->rowColSize - 1)) {
     /* code */
-    if ((sizeOf(this->board) < 26) && (sizeOf(this->board[0]) < 26)
-    && ((sizeOf(this->board[0]) + 2) <= 26)) {
+    std::cout << "expandingBoard" << '\n';
+    if ((this->rowColSize < 26) && ((this->rowColSize + 2) <= 26)) {
       /* code */
-      Tile** bigBoard = new bigBoard*[(sizeOf(this->board) + 2)];
+      Tile*** bigBoard = new Tile**[this->rowColSize + 2];
 
-      for(int i = 0; i < (sizeOf(this->board) + 2); i++)
+      for(int i = 0; i < (this->rowColSize + 2); i++)
       {
-        bigBoard[i] = new Tile[(sizeOf(this->board) + 2)];
+        bigBoard[i] = new Tile*[this->rowColSize + 2];
       }
 
-      for (int i = 0; i < sizeOf(this->board); i++) {
+      for (int i = 0; i < (this->rowColSize + 2); i++) {
         /* code */
-        for (int j = 0; j < sizeOf(this->board[0]); j++) {
+        for (int j = 0; j < (this->rowColSize + 2); j++) {
+          /* code */
+          bigBoard[i][j] = nullptr;
+        }
+      }
+
+      for (int i = 0; i < this->rowColSize; i++) {
+        /* code */
+        for (int j = 0; j < this->rowColSize; j++) {
           /* code */
           bigBoard[i + 1][j + 1] = this->board[i][j];
         }
       }
 
       this->board = bigBoard;
+      this->rowColSize = this->rowColSize + 2;
     }
   }
 }
@@ -216,11 +219,11 @@ void GameEngine::expandBoard()
 bool GameEngine::checkRow(int row)
 {
   bool needExpanding = false;
-  if ((row < sizeOf(this->board)) && (row >= 0)) {
+  if ((row < this->rowColSize) && (row >= 0)) {
     /* code */
-    for (int i = 0; i < sizeOf(this->board[row]); i++) {
+    for (int i = 0; i < this->rowColSize; i++) {
       /* code */
-      if (this->board[row][i] != null) {
+      if (this->board[row][i] != nullptr) {
         /* code */
         needExpanding = true;
       }
@@ -233,11 +236,11 @@ bool GameEngine::checkRow(int row)
 bool GameEngine::checkColumn(int column)
 {
   bool needExpanding = false;
-  if ((column < sizeOf(this->board[0])) && (column >= 0)) {
+  if ((column < this->rowColSize) && (column >= 0)) {
     /* code */
-    for (int i = 0; i < sizeOf(this->board); i++) {
+    for (int i = 0; i < this->rowColSize; i++) {
       /* code */
-      if (this->board[i][column] != null) {
+      if (this->board[i][column] != nullptr) {
         /* code */
         needExpanding = true;
       }
@@ -250,23 +253,29 @@ bool GameEngine::checkColumn(int column)
 std::string GameEngine::boardToString()
 {
   std::string returnString = "";
-  for (size_t i = 0; i < sizeOf(this->board); i++) {
+  for (int i = 0; i < this->rowColSize; i++) {
     /* code */
     if (i == 0) {
       /* code */
       returnString += "   ";
     }
+    if (i < 10) {
+      /* code */
+      returnString += "  ";
+      returnString += std::to_string(i);
+    }
+    else {
+      returnString += " ";
+      returnString += std::to_string(i);
+    }
 
-    returnString += "  ";
-    returnString += std::to_string(i);
-
-    if (i == (sizeOf(this->board) - 1)) {
+    if (i == (this->rowColSize - 1)) {
       /* code */
       returnString += '\n';
     }
   }
 
-  for (size_t i = 0; i < sizeOf(this->board); i++) {
+  for (int i = 0; i < this->rowColSize; i++) {
     /* code */
     if (i == 0) {
       /* code */
@@ -274,34 +283,32 @@ std::string GameEngine::boardToString()
     }
     returnString += "---";
 
-    if (i == (sizeOf(this->board) - 1)) {
+    if (i == this->rowColSize - 1) {
       /* code */
       returnString += '\n';
     }
   }
-
-  for (size_t i = 0; i < sizeOf(this->board); i++) {
+  for (int i = 0; i < this->rowColSize; i++) {
     /* code */
-    for (size_t j = 0; j < sizeOf(this->board[i]); j++) {
+    for (int j = 0; j < this->rowColSize; j++) {
       /* code */
       if (j == 0) {
         /* code */
         returnString += getKey(i);
         returnString += " |";
       }
-
-      if (this->board[i][j] == NULL) {
+      if (this->board[i][j] == nullptr) {
         /* code */
         returnString += "  |";
       }
       else {
 
-        returnString += this->board[i][j].colour;
-        returnString += std::to_string(this->board[i][j].shape);
+        returnString += this->board[i][j]->colour;
+        returnString += std::to_string(this->board[i][j]->shape);
         returnString += "|";
       }
 
-      if (j == (sizeOf(this->board[i]) - 1)) {
+      if (j == (this->rowColSize - 1)) {
         /* code */
         returnString += '\n';
       }
@@ -312,7 +319,7 @@ std::string GameEngine::boardToString()
 
 char GameEngine::getKey(int value)
 {
-  char returnKey = NULL;
+  char returnKey = '\0';
   for (auto& x: yIndexMap)
   {
     if (x.second == value) {
@@ -327,18 +334,19 @@ char GameEngine::getKey(int value)
 bool GameEngine::checkPos(Tile checkTile, int yPos, int xPos) {
   bool returnBool = false;
 
-  if (yPos >= 0 && yPos < sizeOf(this->board)) {
+  if (yPos >= 0 && yPos < this->rowColSize) {
     /* code */
-    if (xPos >= 0 && xPos < sizeOf(this->board[yPos])) {
-      if (this->board[yPos][xPos].colour == checkTile.colour) {
+    if (xPos >= 0 && xPos < this->rowColSize) {
+
+      if (this->board[yPos][xPos] == nullptr) {
         /* code */
         returnBool = true;
       }
-      else if (this->board[yPos][xPos].shape == checkTile.shape) {
+      else if (this->board[yPos][xPos]->shape == checkTile.shape) {
 
         returnBool = true;
       }
-      else if (this->board[yPos][xPos] == NULL) {
+      else if (this->board[yPos][xPos]->colour == checkTile.colour) {
         /* code */
         returnBool = true;
       }
@@ -351,9 +359,9 @@ bool GameEngine::checkWantedPos(Tile checkTile, int yPos, int xPos)
 {
   bool returnBool = false;
   int checkableSides = 4;
-  if (yPos >= 0 && yPos < sizeOf(this->board)) {
+  if (yPos >= 0 && yPos < this->rowColSize) {
     /* code */
-    if (xPos >= 0 && xPos < sizeOf(this->board[yPos])) {
+    if (xPos >= 0 && xPos < this->rowColSize) {
       /* code */
       int sideCount = sideCounter(yPos, xPos);
       checkableSides = checkableSides - sideCount;
@@ -394,7 +402,7 @@ int GameEngine::sideCounter(int yPos, int xPos)
     /* code */
     sideCounter++;
   }
-  if (yPos + 1 >= sizeOf(this->Board)) {
+  if (yPos + 1 >= this->rowColSize) {
     /* code */
     sideCounter++;
   }
@@ -402,7 +410,7 @@ int GameEngine::sideCounter(int yPos, int xPos)
     /* code */
     sideCounter++;
   }
-  if (xPos + 1 >= sizeOf(this->Board[0])) {
+  if (xPos + 1 >= this->rowColSize) {
     /* code */
     sideCounter++;
   }
@@ -413,12 +421,12 @@ int GameEngine::sideCounter(int yPos, int xPos)
 int GameEngine::nullChecker(int yPos, int xPos)
 {
   int nullCount = 0;
-  if (yPos >= 0 && yPos < sizeOf(this->board)) {
+  if (yPos >= 0 && yPos < this->rowColSize) {
     /* code */
-    if (xPos >= 0 && xPos < sizeOf(this->board)) {
+    if (xPos >= 0 && xPos < this->rowColSize) {
       if (yPos - 1 >= 0) {
         /* code */
-        if (this->board[yPos - 1][xPos] == NULL) {
+        if (board[yPos - 1][xPos] == nullptr) {
           /* code */
           nullCount++;
         }
@@ -426,23 +434,23 @@ int GameEngine::nullChecker(int yPos, int xPos)
 
       if (xPos - 1 >= 0) {
         /* code */
-        if (this->board[yPos][xPos - 1] == NULL) {
+        if (this->board[yPos][xPos - 1] == nullptr) {
           /* code */
           nullCount++;
         }
       }
 
-      if (yPos + 1 < sizeOf(this->board)) {
+      if (yPos + 1 < this->rowColSize) {
         /* code */
-        if (this->board[yPos + 1][xPos] == NULL) {
+        if (this->board[yPos + 1][xPos] == nullptr) {
           /* code */
           nullCount++;
         }
       }
 
-      if (xPos + 1 < sizeOf(this->board[0])) {
+      if (xPos + 1 < this->rowColSize) {
         /* code */
-        if (this->board[yPos][xPos  1] == NULL) {
+        if (this->board[yPos][xPos + 1] == nullptr) {
           /* code */
           nullCount++;
         }
@@ -455,21 +463,21 @@ int GameEngine::nullChecker(int yPos, int xPos)
 
 void GameEngine::pointUpdate(int playerNum, int yPos, int xPos)
 {
-  if (playerNum = 0 || playerNum = 1) {
+  if (playerNum == 0 || playerNum == 1) {
     /* code */
     if (checkRowAmount(yPos, xPos) < 6 && checkRowAmount(yPos, xPos) > 0) {
       /* code */
-      player[playerNum].addScore(checkRowAmount(yPos, xPos) + 1);
+      this->players[playerNum]->addScore(checkRowAmount(yPos, xPos) + 1);
     }
     if (checkColAmount(yPos, xPos) < 6 && checkColAmount(yPos, xPos) > 0) {
       /* code */
-      player[playerNum].addScore(checkColAmount(yPos, xPos) + 1);
+      this->players[playerNum]->addScore(checkColAmount(yPos, xPos) + 1);
     }
 
     if (checkColAmount(yPos, xPos) == 0 && checkRowAmount(yPos, xPos) == 0) {
       /* code */
 
-      player[playerNum].addScore(1);
+      this->players[playerNum]->addScore(1);
     }
   }
 
@@ -484,10 +492,11 @@ int GameEngine::checkRowAmount(int yPos, int xPos)
   bool leftStop = false;
   bool rightStop = false;
 
-  if (yPos >= 0 && yPos < sizeOf(this->board)) {
+
+  if (yPos >= 0 && yPos < this->rowColSize) {
     while (leftCheck >= 0 && leftStop == false) {
       /* code */
-      if (this->board[yPos][leftCheck] != NULL) {
+      if (this->board[yPos][leftCheck] != nullptr) {
         /* code */
         rowAmount++;
       }
@@ -498,9 +507,9 @@ int GameEngine::checkRowAmount(int yPos, int xPos)
       leftCheck--;
     }
 
-    while (rightCheck < sizeOf(this->board[yPos]) && rightStop == false) {
+    while (rightCheck < this->rowColSize && rightStop == false) {
       /* code */
-      if (this->board[yPos][rightCheck] != NULL) {
+      if (this->board[yPos][rightCheck] != nullptr) {
         /* code */
         rowAmount++;
       }
@@ -523,10 +532,10 @@ int GameEngine::checkColAmount(int yPos, int xPos)
   bool upStop = false;
   bool downStop = false;
 
-  if (xPos >= 0 && xPos < sizeOf(this->board[0])) {
+  if (xPos >= 0 && xPos < this->rowColSize) {
     while (upCheck >= 0 && upStop == false) {
       /* code */
-      if (this->board[yPos][upCheck] != NULL) {
+      if (this->board[upCheck][xPos] != nullptr) {
         /* code */
         colAmount++;
       }
@@ -537,9 +546,9 @@ int GameEngine::checkColAmount(int yPos, int xPos)
       upCheck--;
     }
 
-    while (downCheck < sizeOf(this->board[yPos]) && downStop == false) {
+    while (downCheck < this->rowColSize && downStop == false) {
       /* code */
-      if (this->board[yPos][downCheck] != NULL) {
+      if (this->board[downCheck][xPos] != nullptr) {
         /* code */
         colAmount++;
       }
@@ -561,15 +570,17 @@ bool GameEngine::checkRowColour(Tile checkTile, int yPos, int xPos)
   bool rowSameColour = true;
   bool leftStop = false;
   bool rightStop = false;
-  if (yPos >= 0 && yPos < sizeOf(this->board)) {
+
+  if (yPos >= 0 && yPos < this->rowColSize) {
     /* code */
-    if (xPos >= 0 && xPos < sizeOf(this->board[yPos])) {
+    if (xPos >= 0 && xPos < this->rowColSize) {
       while(leftCheck >= 0 && leftStop == false && rowSameColour == true) {
-        if (this->board[yPos][leftCheck] != NULL) {
+
+        if (this->board[yPos][leftCheck] != nullptr) {
           /* code */
-          if (this->board[yPos][leftCheck].colour == checkTile.colour) {
+          if (this->board[yPos][leftCheck]->colour == checkTile.colour) {
             /* code */
-            if (this->board[yPos][leftCheck].shape == checkTile.shape) {
+            if (this->board[yPos][leftCheck]->shape == checkTile.shape) {
               /* code */
               leftStop = true;
               rowSameColour = false;
@@ -586,12 +597,12 @@ bool GameEngine::checkRowColour(Tile checkTile, int yPos, int xPos)
         leftCheck--;
       }
 
-      while(rightCheck < sizeOf(this->board[yPos]) && rightStop == false && rowSameColour == true) {
-        if (this->board[yPos][rightCheck] != NULL) {
+      while(rightCheck < this->rowColSize && rightStop == false && rowSameColour == true) {
+        if (this->board[yPos][rightCheck] != nullptr) {
           /* code */
-          if (this->board[yPos][rightCheck].colour == checkTile.colour) {
+          if (this->board[yPos][rightCheck]->colour == checkTile.colour) {
             /* code */
-            if (this->board[yPos][rightCheck].shape == checkTile.shape) {
+            if (this->board[yPos][rightCheck]->shape == checkTile.shape) {
               /* code */
               leftStop = true;
               rowSameColour = false;
@@ -622,15 +633,17 @@ bool GameEngine::checkRowShape(Tile checkTile, int yPos, int xPos)
   bool rowSameShape = true;
   bool leftStop = false;
   bool rightStop = false;
-  if (yPos >= 0 && yPos < sizeOf(this->board)) {
+
+
+  if (yPos >= 0 && yPos < this->rowColSize) {
     /* code */
-    if (xPos >= 0 && xPos < sizeOf(this->board[yPos])) {
+    if (xPos >= 0 && xPos < this->rowColSize) {
       while(leftCheck >= 0 && leftStop == false && rowSameShape == true) {
-        if (this->board[yPos][leftCheck] != NULL) {
+        if (this->board[yPos][leftCheck] != nullptr) {
           /* code */
-          if (this->board[yPos][leftCheck].shape == checkTile.shape) {
+          if (this->board[yPos][leftCheck]->shape == checkTile.shape) {
             /* code */
-            if (this->board[yPos][leftCheck].colour == checkTile.colour) {
+            if (this->board[yPos][leftCheck]->colour == checkTile.colour) {
               /* code */
               leftStop = true;
               rowSameShape = false;
@@ -647,12 +660,12 @@ bool GameEngine::checkRowShape(Tile checkTile, int yPos, int xPos)
         leftCheck--;
       }
 
-      while(rightCheck < sizeOf(this->board[yPos]) && rightStop == false && rowSameShape == true) {
-        if (this->board[yPos][rightCheck] != NULL) {
+      while(rightCheck < this->rowColSize && rightStop == false && rowSameShape == true) {
+        if (this->board[yPos][rightCheck] != nullptr) {
           /* code */
-          if (this->board[yPos][rightCheck].shape == checkTile.shape) {
+          if (this->board[yPos][rightCheck]->shape == checkTile.shape) {
             /* code */
-            if (this->board[yPos][rightCheck].colour == checkTile.colour) {
+            if (this->board[yPos][rightCheck]->colour == checkTile.colour) {
               /* code */
               leftStop = true;
               rowSameShape = false;
@@ -683,17 +696,18 @@ bool GameEngine::checkColColour(Tile checkTile, int yPos, int xPos)
   bool colSameColour = true;
   bool upStop = false;
   bool downStop = false;
-  if (yPos >= 0 && yPos < sizeOf(this->board)) {
+
+  if (yPos >= 0 && yPos < this->rowColSize) {
     /* code */
-    if (xPos >= 0 && xPos < sizeOf(this->board[yPos])) {
+    if (xPos >= 0 && xPos < this->rowColSize) {
       while(upCheck >= 0 && upStop == false && colSameColour == true) {
-        if (this->board[upCheck][xPos] != NULL) {
+        if (this->board[upCheck][xPos] != nullptr) {
           /* code */
-          if (this->board[upCheck][xPos].colour == checkTile.colour) {
+          if (this->board[upCheck][xPos]->colour == checkTile.colour) {
             /* code */
-            if (this->board[upCheck][xPos].shape == checkTile.shape) {
+            if (this->board[upCheck][xPos]->shape == checkTile.shape) {
               /* code */
-              leftStop = true;
+              upStop = true;
               colSameColour = false;
             }
           }
@@ -708,12 +722,12 @@ bool GameEngine::checkColColour(Tile checkTile, int yPos, int xPos)
         upCheck--;
       }
 
-      while(downCheck < sizeOf(this->board[yPos]) && downStop == false && colSameColour == true) {
-        if (this->board[downCheck][xPos] != NULL) {
+      while(downCheck < this->rowColSize && downStop == false && colSameColour == true) {
+        if (this->board[downCheck][xPos] != nullptr) {
           /* code */
-          if (this->board[downCheck][xPos].colour == checkTile.colour) {
+          if (this->board[downCheck][xPos]->colour == checkTile.colour) {
             /* code */
-            if (this->board[downCheck][xPos].shape == checkTile.shape) {
+            if (this->board[downCheck][xPos]->shape == checkTile.shape) {
               /* code */
               downStop = true;
               colSameColour = false;
@@ -744,17 +758,18 @@ bool GameEngine::checkColShape(Tile checkTile, int yPos, int xPos)
   bool colSameColour = true;
   bool upStop = false;
   bool downStop = false;
-  if (yPos >= 0 && yPos < sizeOf(this->board)) {
+
+  if (yPos >= 0 && yPos < this->rowColSize) {
     /* code */
-    if (xPos >= 0 && xPos < sizeOf(this->board[yPos])) {
+    if (xPos >= 0 && xPos < this->rowColSize) {
       while(upCheck >= 0 && upStop == false && colSameColour == true) {
-        if (this->board[upCheck][xPos] != NULL) {
+        if (this->board[upCheck][xPos] != nullptr) {
           /* code */
-          if (this->board[upCheck][xPos].shape == checkTile.shape) {
+          if (this->board[upCheck][xPos]->shape == checkTile.shape) {
             /* code */
-            if (this->board[upCheck][xPos].colour == checkTile.colour) {
+            if (this->board[upCheck][xPos]->colour == checkTile.colour) {
               /* code */
-              leftStop = true;
+              upStop = true;
               colSameColour = false;
             }
           }
@@ -769,12 +784,12 @@ bool GameEngine::checkColShape(Tile checkTile, int yPos, int xPos)
         upCheck--;
       }
 
-      while(downCheck < sizeOf(this->board[yPos]) && downStop == false && colSameColour == true) {
-        if (this->board[downCheck][xPos] != NULL) {
+      while(downCheck < this->rowColSize && downStop == false && colSameColour == true) {
+        if (this->board[downCheck][xPos] != nullptr) {
           /* code */
-          if (this->board[downCheck][xPos].shape == checkTile.shape) {
+          if (this->board[downCheck][xPos]->shape == checkTile.shape) {
             /* code */
-            if (this->board[downCheck][xPos].colour == checkTile.colour) {
+            if (this->board[downCheck][xPos]->colour == checkTile.colour) {
               /* code */
               downStop = true;
               colSameColour = false;
@@ -800,12 +815,11 @@ bool GameEngine::checkColShape(Tile checkTile, int yPos, int xPos)
 bool GameEngine::emptyBoard()
 {
   bool empty = true;
-
-  for (size_t i = 0; i < sizeOf(this->board); i++) {
+  for (int i = 0; i < this->rowColSize; i++) {
     /* code */
-    for (size_t j = 0; j < sizeOf(this->board[i]); j++) {
+    for (int j = 0; j < this->rowColSize; j++) {
       /* code */
-      if (this->board[i][j] != NULL) {
+      if (this->board[i][j] != nullptr) {
         /* code */
         empty = false;
       }
@@ -815,17 +829,16 @@ bool GameEngine::emptyBoard()
   return empty;
 }
 
-std::string GameEngine::toString(playerNum)
+std::string GameEngine::toString(int playerNum)
 {
   std::string returnString = "";
-
-  if (this->players[0] != NULL && this->players[1] != NULL)
+  if (this->players[0] != nullptr && this->players[1] != nullptr)
   {
     if (this->tileBag != nullptr) {
       /* code */
-      for (size_t i = 0; i < sizeOf(this->players); i++) {
+      for (int i = 0; i < 2; i++) {
         /* code */
-        returnString += this->players[i].toString();
+        returnString += this->players[i]->toString();
         returnString += '\n';
       }
 
@@ -833,7 +846,7 @@ std::string GameEngine::toString(playerNum)
       returnString += this->tileBag->toString();
       returnString += '\n';
 
-      returnString += this->players[playerNum].getName();
+      returnString += this->players[playerNum]->getName();
     }
   }
 

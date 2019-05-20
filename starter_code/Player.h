@@ -8,6 +8,8 @@
 //player class hols all the player information
 class Player {
   public:
+    Player();
+
     Player(std::string name, int score, LinkedList* hand);
 
     Player(std::string name);

@@ -1,4 +1,6 @@
 #include "Player.h"
+Player::Player(){}
+
 Player::Player(std::string name, int score, LinkedList* hand)
 {
 	this->name = name;
@@ -49,7 +51,7 @@ void Player::addToHand(Tile* addTile) {
 void Player::replaceFromHand(Tile* removeTile, Bag* bag) {
 	if (this->hand->contains(removeTile)) {
 
-		Tile* movedTile = removeTile;
+		Tile* movedTile = this->hand->getSpecTile(removeTile);
 		this->hand->removeNode(removeTile);
 
 		Tile* addedTile = bag->getTile();
@@ -77,7 +79,7 @@ Tile* Player::placeTile(Tile* placedTile, Bag* bag)
 std::string Player::toString()
 {
 	std::string returnString = "";
-	if (this->name.empty()) {
+	if (this->name.empty() == false) {
 		/* code */
 		returnString += this->name;
 		returnString += '\n';

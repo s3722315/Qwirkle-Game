@@ -3,27 +3,25 @@
 #include "Player.h"
 #include <map>
 #include <string>
+#include <cstddef>
 
 class GameEngine {
   private:
-    Tile** board;
-    Player players[2];
+    Tile*** board;
+    Player* players[2];
     Bag* tileBag;
     std::map<char, int> yIndexMap;
+    int rowColSize;
   public:
-    GameEngine(Player player1, Player player2);
+    GameEngine(Player* player1, Player* player2);
 
-    GameEngine(Player player1, Player player2, Bag* bag, Tile** board);
+    GameEngine(Player* player1, Player* player2, Bag* bag, Tile*** board, int rowColSize);
 
     bool placePiece(int playerNum, Tile placedTile, char yPos, int xPos);
 
     bool replacePiece(int playerNum, Tile replacedTile);
 
     bool checkGameOver();
-
-    void endGame(bool gameEnded);
-
-    void clearBoard();
 
     void expandBoard();
 
@@ -61,5 +59,5 @@ class GameEngine {
 
     bool emptyBoard();
 
-    std::string toString();
-}
+    std::string toString(int playerNum);
+};
