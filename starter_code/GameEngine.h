@@ -8,16 +8,18 @@
 class GameEngine {
   private:
     Tile*** board;
-    Player* players[2];
+    Player* players[4];
     Bag* tileBag;
     std::map<char, int> yIndexMap;
     int rowColSize;
   public:
     GameEngine();
 
-    GameEngine(Player* player1, Player* player2);
+    GameEngine(Player* player1, Player* player2, Player* player3,
+      Player* player4);
 
-    GameEngine(Player* player1, Player* player2, Bag* bag, Tile*** board, int rowColSize);
+    GameEngine(Player* player1, Player* player2, Player* player3,
+      Player* player4, Bag* bag, Tile*** board, int rowColSize);
 
     bool placePiece(int playerNum, Tile placedTile, char yPos, int xPos);
 
@@ -68,5 +70,5 @@ class GameEngine {
     std::string getHand(int playerNum);
 
     Player* getPlayer(int playerNum);
-    
+
 };

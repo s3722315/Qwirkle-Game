@@ -13,10 +13,13 @@ class Game {
 
     void menu();
     void startGame(int playerTurn);
-    void loadGame(std::string fileName);
     void save(std::string fileName, int currentPlayer);
 
-    Player* loadPlayer(std::ifstream myfile)
+    bool loadGame(std::string fileName);
+
+    Player* loadPlayer(std::ifstream& openFile);
+    Tile*** loadBoard(std::ifstream& openFile, int* boardSize);
+    Bag* loadBag(std::ifstream& openFile);
 
     void help();
 

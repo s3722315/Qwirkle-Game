@@ -19,6 +19,8 @@ void Game::menu()
     int menuSelect = 0;
     std::string p1Name;
     std::string p2Name;
+    std::string p3Name;
+    std::string p4Name;
 
     std::string menuString;
     std::cin >> menuString;
@@ -34,6 +36,14 @@ void Game::menu()
 
       std::cout << "Enter a name for player 2 (uppercase characters only)" << '\n';
       std::cin >> p2Name;
+      std::cin.ignore();
+
+      std::cout << "Enter a name for player 3 (uppercase characters only)" << '\n';
+      std::cin >> p3Name;
+      std::cin.ignore();
+
+      std::cout << "Enter a name for player 4 (uppercase characters only)" << '\n';
+      std::cin >> p4Name;
       std::cin.ignore();
 
       bool allCaps = true;
@@ -53,11 +63,28 @@ void Game::menu()
           allCaps = false;
         }
       }
+      for (int i = 0; i < (int)p3Name.length(); i++) {
+        /* code */
+        char c = p3Name[i];
+        if (islower(c) != 0) {
+          /* code */
+          allCaps = false;
+        }
+      }
+      for (int i = 0; i < (int)p4Name.length(); i++) {
+        /* code */
+        char c = p4Name[i];
+        if (islower(c) != 0) {
+          /* code */
+          allCaps = false;
+        }
+      }
 
       if (allCaps == true) {
         /* code */
         std::cout << "Let's play" << '\n';
-        this->gameEngine = GameEngine(new Player(p1Name), new Player(p2Name));
+        this->gameEngine = GameEngine(new Player(p1Name), new Player(p2Name),
+      new Player(p3Name), new Player(p4Name));
         startGame(0);
         menuOff = true;
       }
@@ -67,6 +94,12 @@ void Game::menu()
     }
     else if( menuSelect == 2 ){
 
+      std::cout << "Enter the filename from which load a game" << '\n';
+      std::string loadFile;
+      std::cin >> loadFile;
+      std::cin.ignore();
+
+      menuOff = loadGame(loadFile);
     }
     else if( menuSelect == 3 ){
       std::cout << "Name: Yousef Fares" << '\n';
@@ -100,7 +133,7 @@ void Game::startGame(int playerTurn)
     /* code */
     std::cout << this->gameEngine.getPlayer(currentPlayer)->getName() << ". It's your turn" <<'\n';
 
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < 4; i++) {
       /* code */
       std::cout << "Score for ";
       std::cout << this->gameEngine.getPlayer(i)->getName() <<": ";
@@ -211,12 +244,11 @@ void Game::startGame(int playerTurn)
           gameEnded = true;
         }
 
-        if (currentPlayer == 1) {
+        if (currentPlayer == 3) {
           /* code */
           currentPlayer = 0;
         }
         else {
-
           currentPlayer++;
         }
       }
@@ -235,27 +267,82 @@ void Game::save(std::string fileName, int currentPlayer)
   outFile.close();
 }
 
-Player* loadPlayer(std::ifstream myfile)
+bool Game::loadGame(std::string fileName)
 {
-  if (myfile.is_open()) {
+  bool gameLoaded = false;
+  std::string line;
+  fileName += ".save";
+  std::ifstream openFile(fileName);
+
+  if (openFile.is_open()) {
+    Player* p1 = loadPlayer(openFile);
+    Player* p2 = loadPlayer(openFile);
+    Player* p3 = loadPlayer(openFile);
+    Player* p4 = loadPlayer(openFile);
+
+    int* boardSize = new int(0);
+    Tile*** board = loadBoard(openFile, boardSize);
+
+    Bag* bag = loadBag(openFile);
+
+    getline(openFile, line);
+    std::string currentPlayer = line;
+    std::cout << currentPlayer << '\n';
+    std::cout << p1->getName() << '\n';
+    int currentPlayerNum = 0;
+
+    if (currentPlayer.compare(p1->getName()) == 0) {
+      /* code */
+      currentPlayerNum = 0;
+    }
+    else if (currentPlayer.compare(p2->getName()) == 0) {
+      /* code */
+      currentPlayerNum = 1;
+    }
+    else if (currentPlayer.compare(p3->getName()) == 0) {
+      /* code */
+      currentPlayerNum = 2;
+    }
+    else if (currentPlayer.compare(p4->getName()) == 0) {
+      /* code */
+      currentPlayerNum = 3;
+    }
+
+    std::cout << currentPlayerNum << '\n';
+    this->gameEngine = GameEngine(p1, p2, p3, p4, bag, board, *boardSize);
+
+    gameLoaded = true;
+    openFile.close();
+    startGame(currentPlayerNum);
+  }
+  else {
+    std::cout << "Invalid Input" << '\n';
+  }
+
+  return gameLoaded;
+}
+
+Player* Game::loadPlayer(std::ifstream& openFile)
+{
+  Player* player = nullptr;
+
+  if (openFile.is_open()) {
     /* code */
-    getline(myfile, line);
-    std::string p1Name;
-    p1Name = line;
-    int p1Score;
+    std::string line;
+    getline(openFile, line);
+    std::string playerName;
+    playerName = line;
+    int playerScore;
 
-    getline(myfile, line);
-    p1Score = std::atoi(&line[0]);
+    getline(openFile, line);
+    playerScore = std::atoi(&line[0]);
 
-    std::cout << p1Name << '\n';
-    std::cout << p1Score << '\n';
-
-    getline(myfile, line);
+    getline(openFile, line);
     std::string handString;
     handString = line;
     std::string tile;
-    std::cout << line << '\n';
-    LinkedList* p1Hand = new LinkedList();
+
+    LinkedList* playerHand = new LinkedList();
 
     while (handString.find(",") != std::string::npos)
     {
@@ -264,7 +351,7 @@ Player* loadPlayer(std::ifstream myfile)
       char readColour = tile[0];
       int readShape = std::atoi(&tile[1]);
 
-      p1Hand->addBack(new Tile(readColour, readShape));
+      playerHand->addBack(new Tile(readColour, readShape));
 
       handString = handString.substr(handString.find(",") + 1, handString.length());
 
@@ -272,11 +359,113 @@ Player* loadPlayer(std::ifstream myfile)
     char lastColour = handString[0];
     int lastShape = std::atoi(&handString[1]);
 
-    p1Hand->addBack(new Tile(lastColour, lastShape));
+    playerHand->addBack(new Tile(lastColour, lastShape));
 
-    std::cout << p1Hand->toString() << '\n';
+    player = new Player(playerName, playerScore, playerHand);
 
-    Player* p1 = new Player(p1Name, p1Score, p1Hand);
   }
-  return p1;
+  return player;
+}
+
+Tile*** Game::loadBoard(std::ifstream& openFile, int* boardSize)
+{
+  std::string line;
+  Tile*** board = nullptr;
+  if (openFile.is_open()) {
+
+    getline(openFile, line);
+    std::string xAxis;
+    xAxis = line;
+    int rowCount = 0;
+
+    for (size_t i = 0; i < xAxis.size(); i++) {
+      /* code */
+      if(std::isdigit(xAxis[i]))
+      {
+        rowCount++;
+      }
+    }
+
+    if (rowCount > 10) {
+      /* code */
+      rowCount = rowCount - 10;
+      rowCount = rowCount/2;
+      rowCount = rowCount + 10;
+    }
+
+    *boardSize = rowCount;
+
+    board = new Tile**[rowCount];
+    for(int i = 0; i < rowCount; i++)
+    {
+      board[i] = new Tile*[rowCount];
+    }
+
+    for (int i = 0; i < rowCount; i++) {
+      /* code */
+      for (int j = 0; j < rowCount; j++) {
+        /* code */
+        board[i][j] = nullptr;
+      }
+    }
+
+    getline(openFile, line);
+    for (int i = 0; i < rowCount; i++) {
+      /* code */
+      getline(openFile, line);
+      std::string row = line.substr(line.find("|") + 1, line.length());
+      for (int j = 0; j < rowCount; j++) {
+        /* code */
+        if (line.find("|") != std::string::npos) {
+          /* code */
+          std::string pos = row.substr(0, row.find("|"));
+
+          if (pos.compare("  ") == 0) {
+          }
+          else {
+            char posColour = pos[0];
+            int posShape = std::atoi(&pos[1]);
+
+            board[i][j] = new Tile(posColour, posShape);
+          }
+
+          row = row.substr(row.find("|") + 1, row.length());
+        }
+      }
+    }
+  }
+  return board;
+}
+
+Bag* Game::loadBag(std::ifstream& openFile)
+{
+  Bag* testBag = nullptr;
+  if (openFile.is_open()) {
+    std::string line;
+
+    getline(openFile, line);
+    std::string bag = line;
+    LinkedList* bagTiles = new LinkedList();
+
+    while (bag.find(",") != std::string::npos)
+    {
+      std::string tile = bag.substr(0, bag.find(","));
+
+      char readColour = tile[0];
+      int readShape = std::atoi(&tile[1]);
+
+      bagTiles->addBack(new Tile(readColour, readShape));
+
+      bag = bag.substr(bag.find(",") + 1, bag.length());
+
+    }
+    char lastColour = bag[0];
+    int lastShape = std::atoi(&bag[1]);
+
+    bagTiles->addBack(new Tile(lastColour, lastShape));
+
+    testBag = new Bag(bagTiles);
+  }
+
+  return testBag;
 }

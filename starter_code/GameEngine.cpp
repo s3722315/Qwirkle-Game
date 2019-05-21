@@ -2,10 +2,13 @@
 
 GameEngine::GameEngine(){}
 
-GameEngine::GameEngine(Player* player1, Player* player2)
+GameEngine::GameEngine(Player* player1, Player* player2, Player* player3,
+  Player* player4)
 {
   this->players[0] = player1;
   this->players[1] = player2;
+  this->players[2] = player3;
+  this->players[3] = player4;
 
   this->tileBag = new Bag();
 
@@ -25,7 +28,7 @@ GameEngine::GameEngine(Player* player1, Player* player2)
   }
 
 
-  for (int i = 0; i < 2; i++) {
+  for (int i = 0; i < 4; i++) {
     /* code */
     this->players[i]->initalHand(this->tileBag);
   }
@@ -33,10 +36,13 @@ GameEngine::GameEngine(Player* player1, Player* player2)
   makeYIndexMap();
 }
 
-GameEngine::GameEngine(Player* player1, Player* player2, Bag* bag, Tile*** board, int rowColSize)
+GameEngine::GameEngine(Player* player1, Player* player2, Player* player3,
+  Player* player4, Bag* bag, Tile*** board, int rowColSize)
 {
   this->players[0] = player1;
   this->players[1] = player2;
+  this->players[2] = player3;
+  this->players[3] = player4;
 
   this->tileBag = bag;
   this->board = board;
@@ -50,7 +56,7 @@ bool GameEngine::placePiece(int playerNum, Tile placedTile, char yPos, int xPos)
 {
   bool returnBool = false;
   int yPosInt = this->yIndexMap.find(yPos)->second;
-  if (playerNum == 0 || playerNum == 1)
+  if (playerNum >= 0 && playerNum < 4)
   {;
     if (players[playerNum] != nullptr) {
       /* code */
@@ -103,7 +109,7 @@ bool GameEngine::replacePiece(int playerNum, Tile replacedTile)
 {
   bool returnBool = false;
 
-  if (playerNum == 0 || playerNum == 1)
+  if (playerNum >= 0 && playerNum < 4)
   {
     if (this->players[playerNum] != nullptr) {
 
@@ -120,7 +126,7 @@ bool GameEngine::replacePiece(int playerNum, Tile replacedTile)
 bool GameEngine::checkGameOver()
 {
   bool returnBool = false;
-  for (int i = 0; i < 2; i++) {
+  for (int i = 0; i < 4; i++) {
     /* code */
     if (this->players[i] != nullptr) {
       /* code */
@@ -417,7 +423,7 @@ int GameEngine::nullChecker(int yPos, int xPos)
 
 void GameEngine::pointUpdate(int playerNum, int yPos, int xPos)
 {
-  if (playerNum == 0 || playerNum == 1) {
+  if (playerNum >= 0 && playerNum < 4) {
     /* code */
     if (checkRowAmount(yPos, xPos) < 6 && checkRowAmount(yPos, xPos) > 0) {
       /* code */
@@ -816,11 +822,12 @@ void GameEngine::makeYIndexMap()
 std::string GameEngine::toString(int playerNum)
 {
   std::string returnString = "";
-  if (this->players[0] != nullptr && this->players[1] != nullptr)
+  if (this->players[0] != nullptr && this->players[1] != nullptr &&
+    this->players[2] != nullptr && this->players[3] != nullptr)
   {
     if (this->tileBag != nullptr) {
       /* code */
-      for (int i = 0; i < 2; i++) {
+      for (int i = 0; i < 4; i++) {
         /* code */
         returnString += this->players[i]->toString();
         returnString += '\n';
@@ -840,7 +847,7 @@ std::string GameEngine::toString(int playerNum)
 std::string GameEngine::getHand(int playerNum)
 {
   std::string returnString = "";
-  if (this->players[0] != nullptr && this->players[1] != nullptr)
+  if (playerNum >= 0 && playerNum < 4)
   {
     returnString += this->players[playerNum]->getHand()->toString();
   }
@@ -851,7 +858,7 @@ std::string GameEngine::getHand(int playerNum)
 Player* GameEngine::getPlayer(int playerNum)
 {
   Player* returnPlayer = nullptr;
-  if ((playerNum < 2) && (playerNum >= 0)) {
+  if (playerNum >= 0 && playerNum < 4) {
     /* code */
     returnPlayer = this->players[playerNum];
   }
