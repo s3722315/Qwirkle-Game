@@ -1,5 +1,6 @@
 #include "Bag.h"
 
+// constructor for a new Game
 Bag::Bag() {
 
 	this->tiles = new LinkedList();
@@ -36,6 +37,7 @@ Bag::Bag() {
 	}
 }
 
+//constructor for a load game
 Bag::Bag(LinkedList* tiles) {
 	this->tiles = tiles;
 }
@@ -46,6 +48,7 @@ Tile* Bag::getTile() {
 	return resultTile;
 }
 
+// add a tile into bag
 void Bag::addTile(Tile* tile) {
 	this->tiles->addBack(tile);
 }

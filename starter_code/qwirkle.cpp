@@ -10,9 +10,8 @@ int main(void) {
    LinkedList* list = new LinkedList();
    delete list;
 
-   std::cout << "TODO: Implement Qwirkle!" << std::endl;
-
+   //calls the game
    Game game = Game();
-   
+
    return EXIT_SUCCESS;
 }

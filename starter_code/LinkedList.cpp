@@ -11,18 +11,21 @@ LinkedList::~LinkedList() {
   clear();
 }
 
+ //add a Tile to the front of the linked list
 void LinkedList::addFront(Tile* data)
 {
   Node* newNode = new Node(data, this->head);
   this->head = newNode;
 }
 
+//add a Tile to the back of the linked list
 void LinkedList::addBack(Tile* data)
 {
   if (data != nullptr)
   {
 
     Node* newNode = new Node(data, nullptr);
+    //if the linked list is empty
     if (this->head == nullptr)
     {
 
@@ -30,6 +33,7 @@ void LinkedList::addBack(Tile* data)
     }
     else
     {
+      //if the linked list has nodes
       Node* currentNode = this->head;
       bool nodeAdded = false;
       while (currentNode != nullptr && nodeAdded == false)
@@ -48,6 +52,7 @@ void LinkedList::addBack(Tile* data)
   }
 }
 
+//this will search for a specific tile and delete that node.
 void LinkedList::removeNode(Tile* tileMatch)
 {
   Node* currentNode = this->head;
@@ -57,16 +62,18 @@ void LinkedList::removeNode(Tile* tileMatch)
 
   while (currentNode != nullptr && hasTile == false)
   {
+    //comparing tiles in the linked list to see if the tile is in the node
     if (currentNode->tile->colour == tileMatch->colour &&
       currentNode->tile->shape == tileMatch->shape)
     {
-
+      //if at front
       if (previousNode == nullptr) {
         deleteFront();
       }
       else
       {
 
+        //if the node is in the middle or end of the linked list
         previousNode->next = currentNode->next;
         currentNode->tile = nullptr;
         delete currentNode;
@@ -76,6 +83,7 @@ void LinkedList::removeNode(Tile* tileMatch)
     }
     else
     {
+      //next nodes checked
       previousNode = currentNode;
       currentNode = currentNode->next;
     }
@@ -83,6 +91,7 @@ void LinkedList::removeNode(Tile* tileMatch)
   }
 }
 
+// deletes the node at the front
 void LinkedList::deleteFront()
 {
   if (this->head != nullptr)
@@ -93,6 +102,7 @@ void LinkedList::deleteFront()
   }
 }
 
+// deletes the node at the end
 void LinkedList::deleteBack()
 {
   Node* currentNode = this->head;
@@ -117,6 +127,7 @@ void LinkedList::deleteBack()
   }
 }
 
+//prints the linkedlist to console
 void LinkedList::printAll() {
 	Node* currentNode = this->head;
 	while (currentNode != nullptr) {
@@ -131,7 +142,7 @@ void LinkedList::printAll() {
 Tile* LinkedList::getFront() {
 	Tile* returnTile = nullptr;
   if (this->head != nullptr) {
-    /* code */
+
     returnTile = this->head->tile;
   }
 
@@ -141,13 +152,13 @@ Tile* LinkedList::getFront() {
 Tile* LinkedList::getBack() {
 	Tile* returnTile = nullptr;
   if (this->head != nullptr) {
-    /* code */
+    
     Node* currentNode = this->head;
 
     while (currentNode != nullptr) {
-      /* code */
+
       if (currentNode->next == nullptr) {
-        /* code */
+
         returnTile = currentNode->tile;
       }
       currentNode = currentNode->next;
@@ -157,6 +168,7 @@ Tile* LinkedList::getBack() {
   return returnTile;
 }
 
+//returns the wanted Tile
 Tile* LinkedList::getSpecTile(Tile* specTile)
 {
   Node* currentNode = this->head;
@@ -179,6 +191,7 @@ Tile* LinkedList::getSpecTile(Tile* specTile)
   return wantedTile;
 }
 
+// clears the whole LinkedList, deletes everything
 void LinkedList::clear()
 {
   int nodeCount = size();
@@ -188,18 +201,20 @@ void LinkedList::clear()
   }
 }
 
+// gives the size of the linkedlist
 int LinkedList::size()
 {
   int count = 0;
   Node* currentNode = this->head;
   while (currentNode != nullptr) {
-    /* code */
+
     count++;
     currentNode = currentNode->next;
   }
   return count;
 }
 
+// Checks if the tile wanted exist in the linkedList
 bool LinkedList::contains(Tile* tileCheck)
 {
   Node* currentNode = this->head;
@@ -218,6 +233,7 @@ bool LinkedList::contains(Tile* tileCheck)
   }
   return hasTile;
 }
+
 
 std::string LinkedList::toString()
 {

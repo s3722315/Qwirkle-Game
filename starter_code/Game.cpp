@@ -5,8 +5,10 @@ Game::Game()
   menu();
 }
 
+//the menu
 void Game::menu()
 {
+  //to turn off the menu
   bool menuOff = false;
   while (menuOff == false) {
     std::cout << "Menu" << '\n';
@@ -23,84 +25,112 @@ void Game::menu()
     std::string p4Name;
 
     std::string menuString;
-    std::cin >> menuString;
-    std::cin.ignore();
+    //check if input is end of file
+    if (!std::cin.eof()) {
 
-    menuSelect = std::atoi(&menuString[0]);
+      //get the string that the user entered
+      std::cin >> menuString;
+      std::cin.ignore();
 
+      menuSelect = std::atoi(&menuString[0]);
+    }
+    else {
+      menuSelect = 4;
+    }
+
+    //new game
     if (menuSelect == 1){
+
       std::cout << "Starting a New Game" << '\n';
       std::cout << "Enter a name for player 1 (uppercase characters only)" << '\n';
-      std::cin >> p1Name;
-      std::cin.ignore();
 
-      std::cout << "Enter a name for player 2 (uppercase characters only)" << '\n';
-      std::cin >> p2Name;
-      std::cin.ignore();
+      bool skip = false;
 
-      std::cout << "Enter a name for player 3 (uppercase characters only)" << '\n';
-      std::cin >> p3Name;
-      std::cin.ignore();
+      //asking for player names
+      if (!std::cin.eof()) {
+        std::cin >> p1Name;
+        std::cin.ignore();
 
-      std::cout << "Enter a name for player 4 (uppercase characters only)" << '\n';
-      std::cin >> p4Name;
-      std::cin.ignore();
+        std::cout << "Enter a name for player 2 (uppercase characters only)" << '\n';
+        if (!std::cin.eof()) {
+          std::cin >> p2Name;
+          std::cin.ignore();
 
-      bool allCaps = true;
-      for (int i = 0; i < (int)p1Name.length(); i++) {
-        /* code */
-        char c = p1Name[i];
-        if (islower(c) != 0) {
-          /* code */
-          allCaps = false;
+          std::cout << "Enter a name for player 3 (uppercase characters only)" << '\n';
+          if (!std::cin.eof()) {
+            std::cin >> p3Name;
+            std::cin.ignore();
+
+            std::cout << "Enter a name for player 4 (uppercase characters only)" << '\n';
+            if (!std::cin.eof()) {
+            std::cin >> p4Name;
+            std::cin.ignore();
+            }
+            else {
+              menuOff = true;
+              skip = true;
+            }
+          }
+          else {
+            menuOff = true;
+            skip = true;
+          }
         }
-      }
-      for (int i = 0; i < (int)p2Name.length(); i++) {
-        /* code */
-        char c = p2Name[i];
-        if (islower(c) != 0) {
-          /* code */
-          allCaps = false;
+        else {
+          menuOff = true;
+          skip = true;
         }
-      }
-      for (int i = 0; i < (int)p3Name.length(); i++) {
-        /* code */
-        char c = p3Name[i];
-        if (islower(c) != 0) {
-          /* code */
-          allCaps = false;
-        }
-      }
-      for (int i = 0; i < (int)p4Name.length(); i++) {
-        /* code */
-        char c = p4Name[i];
-        if (islower(c) != 0) {
-          /* code */
-          allCaps = false;
-        }
-      }
-
-      if (allCaps == true) {
-        /* code */
-        std::cout << "Let's play" << '\n';
-        this->gameEngine = GameEngine(new Player(p1Name), new Player(p2Name),
-      new Player(p3Name), new Player(p4Name));
-        startGame(0);
-        menuOff = true;
       }
       else {
-        std::cout << "Invalid Input" << '\n';
+        menuOff = true;
+        skip = true;
+      }
+
+      if (skip == false) {
+
+        //checking if all player names are in caps
+        bool allCaps = true;
+        allCaps = checkAllCaps(p1Name);
+        allCaps = checkAllCaps(p2Name);
+        allCaps = checkAllCaps(p3Name);
+        allCaps = checkAllCaps(p4Name);
+
+        if (allCaps == true) {
+
+          //create the new game
+          std::cout << "Let's play" << '\n';
+          this->gameEngine = GameEngine(new Player(p1Name), new Player(p2Name),
+        new Player(p3Name), new Player(p4Name));
+
+          //start the new game with player 1s turn
+          startGame(0);
+          menuOff = true;
+        }
+        else {
+          std::cout << "Invalid Input" << '\n';
+        }
       }
     }
+
+    //load game
     else if( menuSelect == 2 ){
 
       std::cout << "Enter the filename from which load a game" << '\n';
       std::string loadFile;
-      std::cin >> loadFile;
-      std::cin.ignore();
 
-      menuOff = loadGame(loadFile);
+      //look for the file and attempt to load game
+      if (!std::cin.eof()) {
+        std::cin >> loadFile;
+        std::cin.ignore();
+
+        menuOff = loadGame(loadFile);
+      }
+      else {
+        menuOff = true;
+      }
     }
+
+    //group information
     else if( menuSelect == 3 ){
       std::cout << "Name: Yousef Fares" << '\n';
        std::cout << "Student ID: 3724131" << '\n';
@@ -114,6 +144,8 @@ void Game::menu()
        std::cout << "Student ID: 3629698" << '\n';
        std::cout << "Email: s3629698@student.rmit.edu.au" << '\n';
     }
+
+    //quit
     else if( menuSelect == 4 ){
       menuOff = true;
     }
@@ -124,17 +156,21 @@ void Game::menu()
    std::cout << "Goodbye" << '\n';
 }
 
+//the game output
 void Game::startGame(int playerTurn)
 {
   bool gameEnded = false;
+  //current playersTurn
   int currentPlayer = playerTurn;
 
+  //loop till game is left or ends
   while (gameEnded == false) {
-    /* code */
+
+    //display player info and board
     std::cout << this->gameEngine.getPlayer(currentPlayer)->getName() << ". It's your turn" <<'\n';
 
     for (int i = 0; i < 4; i++) {
-      /* code */
+
       std::cout << "Score for ";
       std::cout << this->gameEngine.getPlayer(i)->getName() <<": ";
       std::cout << this->gameEngine.getPlayer(i)->getScore() << '\n';
@@ -149,36 +185,48 @@ void Game::startGame(int playerTurn)
 
     bool turnEnded = false;
     bool quit = false;
+
+    //loop for the current player turn
     while (turnEnded == false) {
       std::string userOption;
       bool gameSaved = false;
       bool helped = false;
 
-      getline(std::cin, userOption);
+      //check the players input
+      if (!std::cin.eof()) {
+        getline(std::cin, userOption);
+      }
+      else {
+        userOption = "quit";
+      }
 
+      //check if player is replacing piece
       if (userOption.compare(0, 7, "replace") == 0) {
-        /* code */
+
         if (userOption.length() == 10) {
-          /* code */
+
           char inputColour = userOption[8];
           std::cout << inputColour << '\n';
 
           int inputShape = std::atoi(&userOption[9]);
           std::cout << inputShape << '\n';
 
+          //attempt to replace piece
           if (this->gameEngine.replacePiece(currentPlayer, Tile(inputColour, inputShape)) == true) {
-            /* code */
+
             turnEnded = true;
           }
         }
 
       }
+
+      //checking if player is placing piece
       else if (userOption.compare(0, 5, "place") == 0) {
-        /* code */
+
         if (userOption.compare(9, 2, "at") == 0) {
-          /* code */
+
           if (userOption.length() == 14 || userOption.length() == 15) {
-            /* code */
+
             std::string tileInput = userOption.substr(6, 7);
             char inputColour = tileInput[0];
             int inputShape = std::atoi(&tileInput[1]);
@@ -187,6 +235,7 @@ void Game::startGame(int playerTurn)
             char inputYPos = inputPos[0];
             int inputXPos = std::atoi(&inputPos[1]);
 
+            //attempt to place piece
             if (this->gameEngine.placePiece(currentPlayer, Tile(inputColour, inputShape), inputYPos, inputXPos) == true) {
 
               turnEnded = true;
@@ -194,10 +243,12 @@ void Game::startGame(int playerTurn)
           }
         }
       }
+
+      //save the game
       else if (userOption.compare(0, 4, "save") == 0)
       {
         if (userOption.find(" ") > 0) {
-          /* code */
+
           std::string saveFileName = userOption.substr(userOption.find(" ") + 1, userOption.length());
           save(saveFileName, currentPlayer);
           gameSaved = true;
@@ -206,10 +257,13 @@ void Game::startGame(int playerTurn)
         }
 
       }
+      //quit the game
       else if (userOption.compare("quit") == 0) {
 
         quit = true;
       }
+
+      //help options
       else if (userOption.compare("help") == 0) {
 
         std::cout << "Commands:" << '\n';
@@ -222,30 +276,56 @@ void Game::startGame(int playerTurn)
 
         helped = true;
       }
-      // if (userOption == EOF) {
-      //   /* code */
-      // }
+
+      // check if player quit
       if (quit == true) {
-        /* code */
+
         turnEnded = true;
         gameEnded = true;
       }
 
+      //check for invalid input
       if (turnEnded == false && gameSaved == false && helped == false) {
-        /* code */
+
         std::cout << "Invalid input" << '\n';
         std::cout << "Enter 'help' for command list" << '\n';
       }
 
+      //check for turn ended
       if (turnEnded == true) {
-        /* code */
+
+        //check game is over
         if (this->gameEngine.checkGameOver() == true) {
-          /* code */
+
+          std::cout << "Game over" << '\n';
+
+          int winnerScore = 0;
+          int winner = 0;
+
+          for (int i = 0; i < 4; i++) {
+
+            //print the players final scores
+            std::cout << "Score for ";
+            std::cout << this->gameEngine.getPlayer(i)->getName();
+            std::cout << ": ";
+            std::cout << this->gameEngine.getPlayer(i)->getScore() << '\n';
+
+            if (this->gameEngine.getPlayer(i)->getScore() > winnerScore) {
+
+              winnerScore = this->gameEngine.getPlayer(i)->getScore();
+              winner = i;
+            }
+          }
+
+          std::cout << "Player " << this->gameEngine.getPlayer(winner)->getName();
+          std::cout << " won!" << '\n';
+
           gameEnded = true;
         }
 
+        //if the player is the fourth, the next player is the first player
         if (currentPlayer == 3) {
-          /* code */
+
           currentPlayer = 0;
         }
         else {
@@ -256,6 +336,7 @@ void Game::startGame(int playerTurn)
   }
 }
 
+//saves the current game
 void Game::save(std::string fileName, int currentPlayer)
 {
   fileName += ".save";
@@ -267,6 +348,7 @@ void Game::save(std::string fileName, int currentPlayer)
   outFile.close();
 }
 
+//loads in a game
 bool Game::loadGame(std::string fileName)
 {
   bool gameLoaded = false;
@@ -274,45 +356,52 @@ bool Game::loadGame(std::string fileName)
   fileName += ".save";
   std::ifstream openFile(fileName);
 
+  //check if file exist
   if (openFile.is_open()) {
+
+    //creating players from file
     Player* p1 = loadPlayer(openFile);
     Player* p2 = loadPlayer(openFile);
     Player* p3 = loadPlayer(openFile);
     Player* p4 = loadPlayer(openFile);
 
+    //creating board
     int* boardSize = new int(0);
     Tile*** board = loadBoard(openFile, boardSize);
 
+    //creating bag
     Bag* bag = loadBag(openFile);
 
+    //checking the current players turn
     getline(openFile, line);
     std::string currentPlayer = line;
-    std::cout << currentPlayer << '\n';
-    std::cout << p1->getName() << '\n';
     int currentPlayerNum = 0;
 
     if (currentPlayer.compare(p1->getName()) == 0) {
-      /* code */
+
       currentPlayerNum = 0;
     }
     else if (currentPlayer.compare(p2->getName()) == 0) {
-      /* code */
+
       currentPlayerNum = 1;
     }
     else if (currentPlayer.compare(p3->getName()) == 0) {
-      /* code */
+
       currentPlayerNum = 2;
     }
     else if (currentPlayer.compare(p4->getName()) == 0) {
-      /* code */
+
       currentPlayerNum = 3;
     }
 
-    std::cout << currentPlayerNum << '\n';
+    //creating the loaded game
     this->gameEngine = GameEngine(p1, p2, p3, p4, bag, board, *boardSize);
 
     gameLoaded = true;
     openFile.close();
+    std::cout << "Qwirkle game successfully loaded" << '\n';
+
+    //start the game from the loaded player
     startGame(currentPlayerNum);
   }
   else {
@@ -322,18 +411,21 @@ bool Game::loadGame(std::string fileName)
   return gameLoaded;
 }
 
+//loads in the player info
 Player* Game::loadPlayer(std::ifstream& openFile)
 {
   Player* player = nullptr;
 
   if (openFile.is_open()) {
-    /* code */
+
+    // loading the player name and score
     std::string line;
     getline(openFile, line);
     std::string playerName;
     playerName = line;
     int playerScore;
 
+    //getting the player hand
     getline(openFile, line);
     playerScore = std::atoi(&line[0]);
 
@@ -342,6 +434,7 @@ Player* Game::loadPlayer(std::ifstream& openFile)
     handString = line;
     std::string tile;
 
+    //converting playerhand into a linkedlist
     LinkedList* playerHand = new LinkedList();
 
     while (handString.find(",") != std::string::npos)
@@ -361,25 +454,29 @@ Player* Game::loadPlayer(std::ifstream& openFile)
 
     playerHand->addBack(new Tile(lastColour, lastShape));
 
+    //creating player
     player = new Player(playerName, playerScore, playerHand);
 
   }
   return player;
 }
 
+//loads in the board
 Tile*** Game::loadBoard(std::ifstream& openFile, int* boardSize)
 {
   std::string line;
   Tile*** board = nullptr;
   if (openFile.is_open()) {
 
+    //reading the xAxis
     getline(openFile, line);
     std::string xAxis;
     xAxis = line;
     int rowCount = 0;
 
+    //calculating teh board size
     for (size_t i = 0; i < xAxis.size(); i++) {
-      /* code */
+
       if(std::isdigit(xAxis[i]))
       {
         rowCount++;
@@ -387,7 +484,7 @@ Tile*** Game::loadBoard(std::ifstream& openFile, int* boardSize)
     }
 
     if (rowCount > 10) {
-      /* code */
+
       rowCount = rowCount - 10;
       rowCount = rowCount/2;
       rowCount = rowCount + 10;
@@ -395,6 +492,7 @@ Tile*** Game::loadBoard(std::ifstream& openFile, int* boardSize)
 
     *boardSize = rowCount;
 
+    //creating board
     board = new Tile**[rowCount];
     for(int i = 0; i < rowCount; i++)
     {
@@ -402,22 +500,23 @@ Tile*** Game::loadBoard(std::ifstream& openFile, int* boardSize)
     }
 
     for (int i = 0; i < rowCount; i++) {
-      /* code */
+
       for (int j = 0; j < rowCount; j++) {
-        /* code */
+
         board[i][j] = nullptr;
       }
     }
 
+    //adding the tiles into the board
     getline(openFile, line);
     for (int i = 0; i < rowCount; i++) {
-      /* code */
+
       getline(openFile, line);
       std::string row = line.substr(line.find("|") + 1, line.length());
       for (int j = 0; j < rowCount; j++) {
-        /* code */
+
         if (line.find("|") != std::string::npos) {
-          /* code */
+
           std::string pos = row.substr(0, row.find("|"));
 
           if (pos.compare("  ") == 0) {
@@ -437,14 +536,18 @@ Tile*** Game::loadBoard(std::ifstream& openFile, int* boardSize)
   return board;
 }
 
+//loads in the bag
 Bag* Game::loadBag(std::ifstream& openFile)
 {
   Bag* testBag = nullptr;
   if (openFile.is_open()) {
     std::string line;
 
+    // geting the bag
     getline(openFile, line);
     std::string bag = line;
+
+    // creating the bag linked list
     LinkedList* bagTiles = new LinkedList();
 
     while (bag.find(",") != std::string::npos)
@@ -464,8 +567,26 @@ Bag* Game::loadBag(std::ifstream& openFile)
 
     bagTiles->addBack(new Tile(lastColour, lastShape));
 
+    //creating the bag
     testBag = new Bag(bagTiles);
   }
 
   return testBag;
+}
+
+//checks if the string is all caps
+bool Game::checkAllCaps(std::string checkString)
+{
+  bool allCaps = true;
+
+  for (int i = 0; i < (int)checkString.length(); i++) {
+
+    char c = checkString[i];
+    if (islower(c) != 0) {
+
+      allCaps = false;
+    }
+  }
+
+  return allCaps;
 }

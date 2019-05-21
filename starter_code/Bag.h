@@ -8,9 +8,10 @@
 
 class Bag {
 public:
-	// initial the tiles bag
+	// constructor for a new Game
 	Bag();
 
+	//constructor for a load game
 	Bag(LinkedList* tiles);
 	// to get a tile from the linked list, it will remove a tile at the begin of the linked list
 	// in this function we prefer returning a tile object from the linked list rather than LinkedList*,
@@ -21,12 +22,11 @@ public:
 	// add a tile into bag
 	void addTile(Tile* tile);
 
-	// to should tiles in LinkedList "tiles"
+
 	std::string toString();
 
-	//tell us when you update the file
 
 private:
-	// tiles should not be a pointer
+	
 	LinkedList* tiles;
 };

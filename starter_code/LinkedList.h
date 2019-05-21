@@ -12,9 +12,9 @@ public:
 
    LinkedList();
    ~LinkedList();
-   //This will read in a tile, then add it to the front of the linked list
+   //add a Tile to the front of the linked list
    void addFront(Tile* data);
-   //this will read in a tile, then add it to the end of the linked List
+   //add a Tile to the back of the linked list
    void addBack(Tile* data);
 
    //this will search for a specific tile and delete that node.
@@ -24,18 +24,20 @@ public:
    // deletes the node at the end
    void deleteBack();
 
+   //prints the linkedlist to console
    void printAll();
 
    Tile* getFront();
 
    Tile* getBack();
 
+   //returns the wanted Tile
    Tile* getSpecTile(Tile* specTile);
    // clears the whole LinkedList, deletes everything
    void clear();
    // gives the size of the linkedlist
    int size();
-   // CHecks if the tile wanted exist in the linkedList
+   // CHhcks if the tile wanted exist in the linkedList
    bool contains(Tile* tileCheck);
 
    std::string toString();

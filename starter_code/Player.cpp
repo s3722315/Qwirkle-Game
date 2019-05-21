@@ -1,6 +1,7 @@
 #include "Player.h"
 Player::Player(){}
 
+//Constructor for a load game
 Player::Player(std::string name, int score, LinkedList* hand)
 {
 	this->name = name;
@@ -8,6 +9,7 @@ Player::Player(std::string name, int score, LinkedList* hand)
 	this->hand = hand;
 }
 
+// Constructor for a new game
 Player::Player(std::string name) {
 	this->name = name;
 	this->score = 0;
@@ -18,6 +20,7 @@ LinkedList* Player::getHand()
 	return this->hand;
 }
 
+//adds the begining hand
 void Player::initalHand(Bag* bag) {
 	const int numsOfTiles = 6;
 	for (int i = 0; i < numsOfTiles; ++i) {
@@ -26,6 +29,7 @@ void Player::initalHand(Bag* bag) {
 	}
 }
 
+//prints the players hand to console, in to string format
 void Player::printHand() {
 	this->hand->printAll();
 }
@@ -41,20 +45,27 @@ std::string Player::getName() {
 void Player::setScore(int score) {
 	this->score = score;
 }
+
+//add an amount to the players score
 void Player::addScore(int plusValue) {
 	this->score += plusValue;
 }
 
+//add a node
 void Player::addToHand(Tile* addTile) {
 	this->hand->addBack(addTile);
 }
 
+//replace tile with bag
 void Player::replaceFromHand(Tile* removeTile, Bag* bag) {
+	//check if tile is in hand
 	if (this->hand->contains(removeTile)) {
 
+		//get the tile for return and remove it from hand
 		Tile* movedTile = this->hand->getSpecTile(removeTile);
 		this->hand->removeNode(removeTile);
 
+		//get a tile from the bag and add to hand
 		Tile* addedTile = bag->getTile();
 		addToHand(addedTile);
 
@@ -62,6 +73,7 @@ void Player::replaceFromHand(Tile* removeTile, Bag* bag) {
 	}
 }
 
+//return a tile and get a new tile from bag
 Tile* Player::placeTile(Tile* placedTile, Bag* bag)
 {
 	Tile* placingTile = nullptr;
@@ -77,11 +89,12 @@ Tile* Player::placeTile(Tile* placedTile, Bag* bag)
 	return placingTile;
 }
 
+//converts player info into a readable string
 std::string Player::toString()
 {
 	std::string returnString = "";
 	if (this->name.empty() == false) {
-		/* code */
+
 		returnString += this->name;
 		returnString += '\n';
 		returnString += std::to_string(this->score);

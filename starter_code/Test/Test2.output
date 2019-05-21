@@ -1,0 +1,39 @@
+Menu
+----
+1. New Game
+2. Load Game
+3. Show student information
+4. Quit
+Enter the filename from which load a game
+Qwirkle game successfully loaded
+DOG. It's your turn
+Score for ANDY: 13
+Score for PHAM: 16
+Score for PIG: 15
+Score for DOG: 14
+     0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+  -------------------------------------------------
+A |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+B |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+C |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+D |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+E |  |  |  |  |  |  |  |  |  |  |  |P3|  |  |  |  |
+F |  |  |  |  |  |  |  |O1|O5|O6|O2|O3|  |  |  |  |
+G |  |  |  |  |  |  |  |  |  |R6|  |  |  |  |  |  |
+H |  |  |  |  |  |  |  |  |G4|G6|  |G4|  |  |  |  |
+I |  |  |  |  |  |  |  |  |  |B6|B2|B4|B3|B1|B5|  |
+J |  |  |  |  |  |  |  |  |  |  |  |P4|  |P1|  |  |
+K |  |  |  |  |  |  |  |  |  |  |  |  |  |O1|  |  |
+L |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+M |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+N |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+O |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+P |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+
+
+Your hand is
+Y1,G5,Y2,B6,R4,O6
+
+Invalid input
+Enter 'help' for command list
+Goodbye
